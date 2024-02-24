@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://cloudconvert.com/
+HostUrl=https://eu-central.storage.cloudconvert.com/tasks/a113db32-1d66-45dc-bd2a-60c46d03bed7/android-chrome-256x256.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cloudconvert-production%2F20240224%2Ffra%2Fs3%2Faws4_request&X-Amz-Date=20240224T150559Z&X-Amz-Expires=86400&X-Amz-Signature=1a091ca9fc9f8849841c4df4b0495d8256a51cb7468cecdb44204c95d3c5baaf&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22android-chrome-256x256.webp%22&response-content-type=image%2Fwebp&x-id=GetObject
