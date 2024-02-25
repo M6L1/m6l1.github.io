@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Dark Side of C Programming Language | NEXUS-Link 
+</title>
+<meta name="description" content="tricks and pitfalls of C" />
+<meta property="og:title" content="Dark Side of C Programming Language | NEXUS-Link" />
+<meta name="twitter:title" content="Dark Side of C Programming Language | NEXUS-Link" />
+<meta itemprop="name" content="Dark Side of C Programming Language | NEXUS-Link" />
+<meta name="application-name" content="Dark Side of C Programming Language | NEXUS-Link" />
+<meta property="og:description"
+      content="tricks and pitfalls of C" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/posts/c-pitfalls/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/c_programming_language_logo.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/c_programming_language_logo.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Dark Side of C Programming Language
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/c_programming_language_logo_huc764f2ca599ef06d0d86977ee1e51fa0_459868_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/c_programming_language_logo_huc764f2ca599ef06d0d86977ee1e51fa0_459868_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/c_programming_language_logo_huc764f2ca599ef06d0d86977ee1e51fa0_459868_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/c_programming_language_logo_huc764f2ca599ef06d0d86977ee1e51fa0_459868_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/c_programming_language_logo_huc764f2ca599ef06d0d86977ee1e51fa0_459868_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h3 id="mixed-operators">Mixed Operators</h3>
+<p>What is the outcome when the following code is executed: 0 or 1?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, b <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, c;
+</span></span><span style="display:flex;"><span>	c <span style="color:#f92672">=</span> a<span style="color:#f92672">+++</span>b;
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;a, b, c = %d, %d, %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, a, b, c);
+</span></span></code></pre></div><p>This code snippet is interpreted by the compiler as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	c <span style="color:#f92672">=</span> a<span style="color:#f92672">++</span> <span style="color:#f92672">+</span> b;
+</span></span></code></pre></div><p>Because the increment syntax ++ is placed after a, the compiler, while executing from left to right, postpones the increment operation. Thus, the execution result is: <code>a, b, c = 0, 1, 0</code>.</p>
+<h3 id="the-mystery-of-the-exclamation-mark">The Mystery of the Exclamation Mark</h3>
+<p>This code segment compiles flawlessly, without warnings or errors, and executes successfully:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">&#39;</span>cat<span style="color:#f92672">!</span><span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;a = %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, a);
+</span></span></code></pre></div><p>Upon execution, the variable a is assigned the value 1685022497, which changes with every run. Experiment by removing the exclamation mark at the end or by extending the term cat to exceed three bytes, for instance, to cats, and note the results.</p>
+<h3 id="switch-case-code-fragment">Switch-Case Code Fragment</h3>
+<p>In a switch-case statement, only the code within the <strong>cases</strong> has an effect, rendering the initialization of variable b pointless.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> (a) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// outside case will not be executed
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> b <span style="color:#f92672">=</span> a <span style="color:#f92672">+</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;b = %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, b);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    	    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>The execution result of this program is: <code>b = 0</code>.</p>
+<h3 id="define-and-typedef">define and typedef</h3>
+<p>Defining two byte pointers using both <strong>define</strong> and <strong>typedef</strong>, then checking their sizes with sizeof reveals:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">#define BYTE_PTR1 unsigned char *
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> BYTE_PTR2;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	BYTE_PTR1 pByte1, pByte2;
+</span></span><span style="display:flex;"><span>	BYTE_PTR2 pByte3, pByte4;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%lu, %lu, %lu %lu,&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sizeof</span>(pByte1), <span style="color:#66d9ef">sizeof</span>(pByte2), <span style="color:#66d9ef">sizeof</span>(pByte3), <span style="color:#66d9ef">sizeof</span>(pByte4) ); <span style="color:#75715e">// 8, 1, 8, 8
+</span></span></span></code></pre></div><p>Given the execution environment is a 64-bit machine, the size of a pointer is 8 bytes. The type of <code>pByte2</code> is actually <code>unsigned char</code>, not <code>unsigned char*</code>. This discrepancy arises because the first declaration method is expanded during compilation as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> pByte1, pByte2;
+</span></span></code></pre></div><p>The second variable, <code>pByte2</code>, is not a pointer to a type but the actual type itself.</p>
+<h3 id="struct-alignment">struct Alignment</h3>
+<p>Consider two <strong>structs</strong> as follows, declaring a variable <code>Tom</code> to represent the Student structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Human {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> name[<span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> gender;
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Student {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">struct</span> Human info;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">char</span> school[<span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">float</span> grade;
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Student Tom;
+</span></span></code></pre></div><p>When examined separately, the size of each field within a structure is apparent. Yet, viewing the structure as a whole complicates matters. Due to the program&rsquo;s execution accessing data in 4-byte increments, data sizes align to 4-byte multiples to decrease access frequency and improve program efficiency. Below are the results for the sizes of each individual field and the total structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">sizeof</span>(Tom.info.name)   <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sizeof</span>(Tom.info.gender) <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sizeof</span>(Tom.info)        <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>    <span style="color:#75715e">// 10 + 4 = 14, aligned to 16
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">sizeof</span>(Tom.school)      <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sizeof</span>(Tom.grade)       <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">sizeof</span>(Tom)             <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>    <span style="color:#75715e">// 16 + 10 + 4 = 30, aligned to 32
+</span></span></span></code></pre></div><h3 id="automatic-type-conversion">Automatic Type Conversion</h3>
+<p>Actually, C is not a <a href="http://en.wikipedia.org/wiki/Strong_and_weak_typing">strongly typed language</a>, meaning explicit conversion is not necessary for some different types of variables; the compiler automatically performs type conversion. Does the following outcome match your expectations?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> b <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">100</span>;
+</span></span><span style="display:flex;"><span>    (a <span style="color:#f92672">+</span> b <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">?</span> <span style="color:#a6e22e">puts</span>(<span style="color:#e6db74">&#34;a + b &gt; 0&#34;</span>) <span style="color:#f92672">:</span> <span style="color:#a6e22e">puts</span>(<span style="color:#e6db74">&#34;a + b &lt;= 0&#34;</span>);
+</span></span></code></pre></div><p>The result of executing this program is <code>a + b &gt; 0</code>. This occurs because if an <strong>unsigned</strong> type is present in the expression, all components are converted to an <strong>unsigned</strong> type, resulting in 1 plus a large positive integer, which is greater than zero.</p>
+<h3 id="conversion-between-char-and-float">Conversion between char* and float</h3>
+<p>Standard method:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">char</span> str[<span style="color:#ae81ff">20</span>];
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// convert from float to char*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sprintf</span>(str, <span style="color:#e6db74">&#34;%f&#34;</span>, <span style="color:#ae81ff">1.2345</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// convert from char* to float
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;float = %f</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#a6e22e">atof</span>(str));
+</span></span></code></pre></div><p>Unconventional method:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">// convert from float to char*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%a&#34;</span>, <span style="color:#ae81ff">1.2345</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// output：0x1.3c083126e978dp+0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// convert from char* to float
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;float = %f</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#a6e22e">atof</span>(<span style="color:#e6db74">&#34;0x1.3c083126e978dp+0&#34;</span>));
+</span></span></code></pre></div><h3 id="the-shortest-c-program">The Shortest C Program</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	main;
+</span></span></code></pre></div><p>Compilable, but it generates warning messages, so it can be modified to:
+Executing these two programs results in a Bus error.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> main;
+</span></span></code></pre></div><p>Executing these two programs results in a Bus error.</p>
+<h3 id="constants-and-pointers">Constants and Pointers</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>, b <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> ptr1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> ptr2 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>b;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> ptr3 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>c;
+</span></span></code></pre></div><p><code>ptr1</code> is a <strong>pointer to a constant</strong>, the value at the pointed address is constant.</p>
+<p><code>ptr2</code> is a <strong>constant pointer</strong>, the address it holds is constant.</p>
+<p><code>ptr3</code> is a <strong>constant pointer to a constant</strong>, both the value at the pointed address and the address itself are constant.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	ptr1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>b;
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// *ptr1 = 10; // could not be compiled
+</span></span></span></code></pre></div><p>The restored address can be modified, but the pointed content cannot be.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#f92672">*</span>ptr2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ptr2 = &amp;a;  // could not be compiled
+</span></span></span></code></pre></div><p>The pointed content can be modified, but the recorded address cannot be.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">// *ptr3 = 10; // could not be compiled
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// ptr3 = &amp;b;  // could not be compiled
+</span></span></span></code></pre></div><p>Neither the pointed content nor the restored address can be modified.</p>
+<h3 id="c-language-pointers-clockwisespiral-rule">C Language Pointer&rsquo;s Clockwise/Spiral Rule</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	     <span style="color:#f92672">+-------+</span>
+</span></span><span style="display:flex;"><span>	     <span style="color:#f92672">|</span> <span style="color:#f92672">+-+</span>   <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	     <span style="color:#f92672">|</span> <span style="color:#f92672">^</span> <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>str[<span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">^</span>    <span style="color:#f92672">^</span>   <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">|</span>    <span style="color:#f92672">+---+</span>   <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">+------------+</span>
+</span></span></code></pre></div><p>Beginning with the variable <code>str</code> and interpreting in a clockwise direction: <code>str</code> is an array of 10 pointers to char.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	     <span style="color:#f92672">+--------------------+</span>
+</span></span><span style="display:flex;"><span>	     <span style="color:#f92672">|</span> <span style="color:#f92672">+---+</span>              <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	     <span style="color:#f92672">|</span> <span style="color:#f92672">|+-+|</span>              <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	     <span style="color:#f92672">|</span> <span style="color:#f92672">|^</span> <span style="color:#f92672">||</span>              <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span>fp)( <span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">float</span> <span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">^</span>   <span style="color:#f92672">^</span> <span style="color:#f92672">^</span>  <span style="color:#f92672">||</span>              <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span> <span style="color:#f92672">+--+|</span>              <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">|</span>   <span style="color:#f92672">+-----+</span>              <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">+------------------------+</span>
+</span></span></code></pre></div><p>Initiating from the variable fp and explaining in a clockwise manner: <code>fp</code> is a pointer to a function accepting an <strong>int</strong> and a pointer to <strong>float</strong>, and it returns a pointer to a <strong>char</strong>.</p>
+<p>使用這個方法來解釋常數與指標裡頭的例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	         <span style="color:#f92672">+-------+</span>
+</span></span><span style="display:flex;"><span>	         <span style="color:#f92672">|</span>   <span style="color:#f92672">+-+</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	         <span style="color:#f92672">|</span>   <span style="color:#f92672">^</span> <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> ptr1; <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">^</span>    <span style="color:#f92672">^</span>     <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">|</span>    <span style="color:#f92672">+-----+</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">+------------+</span>
+</span></span></code></pre></div><p><code>ptr1</code>: It is a pointer to a constant <strong>int</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	   <span style="color:#f92672">+----------------+</span>
+</span></span><span style="display:flex;"><span>	   <span style="color:#f92672">|</span>   <span style="color:#f92672">+----------+</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	   <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span>     <span style="color:#f92672">+-+</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	   <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span>     <span style="color:#f92672">^</span> <span style="color:#f92672">|</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> ptr2;  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">^</span>  <span style="color:#f92672">^</span>   <span style="color:#f92672">^</span>       <span style="color:#f92672">|</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">|</span>  <span style="color:#f92672">|</span>   <span style="color:#f92672">+-------+</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">|</span>  <span style="color:#f92672">+--------------+</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">+-------------------+</span>
+</span></span></code></pre></div><p><code>ptr2</code>: It is a constant pointer to an <strong>int</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	         <span style="color:#f92672">+----------------+</span>
+</span></span><span style="display:flex;"><span>	         <span style="color:#f92672">|</span>   <span style="color:#f92672">+----------+</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	         <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span>     <span style="color:#f92672">+-+</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	         <span style="color:#f92672">|</span>   <span style="color:#f92672">|</span>     <span style="color:#f92672">^</span> <span style="color:#f92672">|</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> ptr3;  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">^</span>    <span style="color:#f92672">^</span>   <span style="color:#f92672">^</span>       <span style="color:#f92672">|</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">|</span>    <span style="color:#f92672">|</span>   <span style="color:#f92672">+-------+</span>  <span style="color:#f92672">|</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">|</span>    <span style="color:#f92672">+--------------+</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">+---------------------+</span>
+</span></span></code></pre></div><p><code>ptr3</code>: It is a constant pointer to a constant <strong>int</strong>.</p>
+<p>Grasping this rule reveals that visualizing the structure and corresponding English sentences can demystify complex concepts.</p>
+<h3 id="object-oriented-programming-with-function-pointers">Object-Oriented Programming with Function Pointers</h3>
+<p>Declaring function pointers within a structure enables C to emulate <strong>class</strong> functionalities of higher-level languages, facilitating simple inheritance. The invocation of function pointers resembles calling methods within a <strong>class</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">// tAnimal structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> tAnimal{
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">int</span> legs;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">int</span> gender;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> (<span style="color:#f92672">*</span>react)(<span style="color:#66d9ef">struct</span> tAnimal <span style="color:#f92672">*</span>self, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>status);
+</span></span><span style="display:flex;"><span>	};
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// tHuman structure, base member is tAnimal structure to simulate inherent
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> tHuman{
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">struct</span> tAnimal base;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">char</span> country[<span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// Functions with the same name formally simulate override
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> (<span style="color:#f92672">*</span>react)(<span style="color:#66d9ef">struct</span> tHuman <span style="color:#f92672">*</span>self, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>status);
+</span></span><span style="display:flex;"><span>	};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">animalReact</span> (<span style="color:#66d9ef">struct</span> tAnimal <span style="color:#f92672">*</span>animal, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>status) {
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">if</span> ( <span style="color:#a6e22e">strcmp</span>(status, <span style="color:#e6db74">&#34;tired&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> )
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;rest&#34;</span>;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ( <span style="color:#a6e22e">strcmp</span>(status, <span style="color:#e6db74">&#34;hungry&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> )
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;eat&#34;</span>;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;idle&#34;</span> ;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">HumanReact</span> (<span style="color:#66d9ef">struct</span> tHuman <span style="color:#f92672">*</span>human, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>status) {
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">if</span> ( <span style="color:#a6e22e">strcmp</span>(status, <span style="color:#e6db74">&#34;rich&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> )
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;retire&#34;</span>;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">return</span> human<span style="color:#f92672">-&gt;</span>base.<span style="color:#a6e22e">react</span>(<span style="color:#f92672">&amp;</span>human<span style="color:#f92672">-&gt;</span>base, status);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[]) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">struct</span> tHuman aHuman;
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// Register function pointers to the corresponding functions
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    aHuman.base.react <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>animalReact;
+</span></span><span style="display:flex;"><span>	    aHuman.react <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>HumanReact;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">puts</span>( aHuman.base.<span style="color:#a6e22e">react</span>(<span style="color:#f92672">&amp;</span>aHuman.base, <span style="color:#e6db74">&#34;rich&#34;</span>) ); <span style="color:#75715e">// idle
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">puts</span>( aHuman.<span style="color:#a6e22e">react</span>(<span style="color:#f92672">&amp;</span>aHuman, <span style="color:#e6db74">&#34;rich&#34;</span>) );           <span style="color:#75715e">// retire
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><h3 id="dynamic-memory-allocation-issues">Dynamic Memory Allocation Issues</h3>
+<p>Besides memory leaks, dynamic memory allocation in C often faces issues like program crashes caused by double frees. The malloc function&rsquo;s lack of success/failure feedback contributes to this overlooked complication.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> arySize <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, <span style="color:#f92672">*</span>pAry <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Dynamically allocate an int array of size 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	pAry <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)<span style="color:#a6e22e">malloc</span>(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">int</span>) <span style="color:#f92672">*</span> arySize);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> ( pAry <span style="color:#f92672">!=</span> NULL ) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Common checks would make you think everything is fine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Let&#39;s do some array operation!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">free</span>(pAry);
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>The result after running this program is: <code>Let's do some array operation!</code></p>
+<h3 id="rare-c-language-keywords">Rare C Language Keywords</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">auto</span> <span style="color:#66d9ef">register</span> <span style="color:#66d9ef">signed</span> <span style="color:#66d9ef">volatile</span> <span style="color:#66d9ef">restrict</span>
+</span></span></code></pre></div><p>In C, variables are classified into storage classes, including <strong>auto</strong> for automatic storage duration and <strong>register</strong> for suggesting storage in the CPU&rsquo;s registers to improve efficiency. Variables not explicitly declared as <strong>static</strong> default to <strong>auto</strong>, indicating automatic storage duration where the variable is automatically allocated and deallocated.</p>
+<p>In C, integer types default to <strong>signed</strong> if the <strong>unsigned</strong> keyword is not explicitly used. This default behavior assumes that variables can hold both positive and negative values unless otherwise specified.</p>
+<p>The <strong>volatile</strong> keyword is used to tell the compiler that a variable&rsquo;s value may change from external sources, not just within the program. This prevents the compiler from optimizing out necessary reads/writes to the variable, crucial in multi-threaded applications and when interacting with hardware that may update memory outside the program&rsquo;s control.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">square</span>(<span style="color:#66d9ef">volatile</span> <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>ptr) { 
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span>ptr <span style="color:#f92672">*</span> <span style="color:#f92672">*</span>ptr;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[]) {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">int</span> <span style="color:#66d9ef">volatile</span> <span style="color:#f92672">*</span> pReg <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span> <span style="color:#66d9ef">volatile</span> <span style="color:#f92672">*</span>) <span style="color:#ae81ff">0x1234</span>; <span style="color:#75715e">// Assuming the value is 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">square</span>(pReg);
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>It seems possible to calculate the square of the value passed by the pointer, but the external variable *pReg is read from the register, and it may be changed by another thread during execution, turning into something like the following program: (After compilation, it&rsquo;s assembly language, this is to express the concept)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">square</span>(<span style="color:#66d9ef">volatile</span> <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>ptr) {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">int</span> a, b;
+</span></span><span style="display:flex;"><span>		a <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>ptr;      <span style="color:#75715e">// At this time, *ptr is 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		b <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>ptr;      <span style="color:#75715e">// At this moment, address 0x1234 is accessed by another thread, and the value is no longer 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> a <span style="color:#f92672">*</span> b;  <span style="color:#75715e">// The result is not the correct square value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span></code></pre></div><p>So why use this keyword to invite trouble? Wouldn&rsquo;t it be better not to use it? Suppose the following situation, a waitLoop() function that waits until <code>*pReg</code> is true before it exits</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span> pReg <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>) <span style="color:#ae81ff">0x1234</span>;
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">waitLoop</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">while</span> (<span style="color:#f92672">*</span>pReg <span style="color:#f92672">!=</span> true) {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}	
+</span></span></code></pre></div><p>Here, <code>*pReg</code> points to the memory address 0x1234, which is initially false, so waitLoop() continues to wait. After some time, hardware changes the value of part of the memory at 0x1234 to true, thus the program exits. It seems there is no problem, but after the program is compiled, the optimizing compiler will assume that <code>*pReg</code> will not be modified (since there are no other expressions that modify the value of <code>*pReg</code>), so the program code will actually be changed to this: (After compilation, it&rsquo;s assembly language, this is to express the concept)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">waitLoop</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">while</span> (true) {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Therefore, it causes an infinite loop in the program. Usually, this situation occurs when hardware also changes the memory addresses accessed by software, so in embedded systems, it&rsquo;s more common to see the use of the <strong>volatile</strong> keyword to force the program to read this value every time it is used.</p>
+<p>The <strong>restrict</strong> keyword, used exclusively with pointers, signifies that the pointer is the only reference to its memory address. This allows the compiler to perform optimizations, understanding that no other pointer will alter the data, thus potentially enhancing program efficiency.</p>
+<h3 id="extended-reading">Extended Reading</h3>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1h49gY3TSiayLMXYmRMaAEMl05FaJ-Z6jDOWOz3EsqqQ/preview?slide=id.gec7eb408_3500">Some dark corners of C</a></li>
+<li><a href="http://www.lysator.liu.se/c/restrict.html">Restricted Pointers in C</a></li>
+<li><a href="http://c-faq.com/decl/spiral.anderson.html">The ``Clockwise/Spiral Rule&rsquo;&rsquo;</a></li>
+</ul>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="#" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>

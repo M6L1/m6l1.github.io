@@ -36,5 +36,12 @@
       <guid>https://m6l1.github.io/posts/data-analysis-assistant/</guid>
       <description>Assistant for Data Analysis</description>
     </item>
+    <item>
+      <title>Dark Side of C Programming Language</title>
+      <link>https://m6l1.github.io/posts/c-pitfalls/</link>
+      <pubDate>Tue, 21 Feb 2023 20:02:15 +0700</pubDate>
+      <guid>https://m6l1.github.io/posts/c-pitfalls/</guid>
+      <description>Pitfalls and tricks of C programming language</description>
+    </item>
   </channel>
 </rss>

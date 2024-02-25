@@ -37,6 +37,13 @@
       <description>Assistant for Data Analysis</description>
     </item>
     <item>
+      <title>Dark Side of C Programming Language</title>
+      <link>https://m6l1.github.io/posts/c-pitfalls/</link>
+      <pubDate>Tue, 21 Feb 2023 20:02:15 +0700</pubDate>
+      <guid>https://m6l1.github.io/posts/c-pitfalls/</guid>
+      <description>Pitfalls and tricks of C programming language</description>
+    </item>
+    <item>
       <title>About</title>
       <link>https://m6l1.github.io/about/</link>
       <pubDate>Sat, 18 Dec 2021 11:10:36 +0800</pubDate>
