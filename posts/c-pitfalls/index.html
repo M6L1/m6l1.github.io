@@ -393,7 +393,7 @@ Executing these two programs results in a Bus error.</p>
 </span></span><span style="display:flex;"><span>		
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 </span></span><span style="display:flex;"><span>	}
-</span></span></code></pre></div><p>It seems possible to calculate the square of the value passed by the pointer, but the external variable *pReg is read from the register, and it may be changed by another thread during execution, turning into something like the following program: (After compilation, it&rsquo;s assembly language, this is to express the concept)</p>
+</span></span></code></pre></div><p>It seems possible to calculate the square of the value passed by the pointer, but the external variable <code>*pReg</code> is read from the register, and it may be changed by another thread during execution, turning into something like the following program: (After compilation, it&rsquo;s assembly language, this is to express the concept)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">square</span>(<span style="color:#66d9ef">volatile</span> <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>ptr) {
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">int</span> a, b;
 </span></span><span style="display:flex;"><span>		a <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>ptr;      <span style="color:#75715e">// At this time, *ptr is 5
@@ -452,7 +452,7 @@ Executing these two programs results in a Bus error.</p>
             
             
             
-            <a href="#" class="text-gray-400 hover:text-gray-300">
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
                 <span class="sr-only">GitHub</span>
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd"
