@@ -5,13 +5,13 @@
     <loc>https://m6l1.github.io/</loc>
     <lastmod>2023-02-25T20:02:15+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/posts/</loc>
+    <loc>https://m6l1.github.io/technotes/</loc>
     <lastmod>2023-02-25T20:02:15+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/api/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/posts/api/</loc>
+    <loc>https://m6l1.github.io/recruitment/api/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/backend/</loc>
@@ -32,13 +32,16 @@
     <loc>https://m6l1.github.io/categories/recruitment/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
+    <loc>https://m6l1.github.io/recruitment/</loc>
+    <lastmod>2023-02-23T11:11:36+07:00</lastmod>
+  </url><url>
     <loc>https://m6l1.github.io/tags/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/database/</loc>
     <lastmod>2023-02-23T10:10:36+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/posts/db-admin/</loc>
+    <loc>https://m6l1.github.io/recruitment/db-admin/</loc>
     <lastmod>2023-02-23T10:10:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/mongodb/</loc>
@@ -53,22 +56,25 @@
     <loc>https://m6l1.github.io/tags/data-analysis/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/posts/data-analysis-dae/</loc>
+    <loc>https://m6l1.github.io/recruitment/data-analysis-dae/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/posts/data-analysis-assistant/</loc>
+    <loc>https://m6l1.github.io/recruitment/data-analysis-assistant/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/python/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
+    <loc>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</loc>
+    <lastmod>2023-02-22T20:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/categories/technotes/</loc>
+    <lastmod>2023-02-22T20:02:15+07:00</lastmod>
+  </url><url>
     <loc>https://m6l1.github.io/tags/c/</loc>
     <lastmod>2023-02-21T20:02:15+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/posts/c-pitfalls/</loc>
-    <lastmod>2023-02-21T20:02:15+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/categories/technotes/</loc>
+    <loc>https://m6l1.github.io/technotes/c-pitfalls/</loc>
     <lastmod>2023-02-21T20:02:15+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/about/</loc>
@@ -76,5 +82,8 @@
   </url><url>
     <loc>https://m6l1.github.io/contact/</loc>
     <lastmod>2021-12-18T03:10:36+00:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/nexus-link/</loc>
+    <lastmod>2021-12-18T11:10:36+08:00</lastmod>
   </url>
 </urlset>

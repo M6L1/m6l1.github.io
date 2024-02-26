@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Comprehensive Guide to REST APIs and WebSocket | NEXUS-Link 
+</title>
+<meta name="description" content="Dig into REST APIs and WebSocket" />
+<meta property="og:title" content="Comprehensive Guide to REST APIs and WebSocket | NEXUS-Link" />
+<meta name="twitter:title" content="Comprehensive Guide to REST APIs and WebSocket | NEXUS-Link" />
+<meta itemprop="name" content="Comprehensive Guide to REST APIs and WebSocket | NEXUS-Link" />
+<meta name="application-name" content="Comprehensive Guide to REST APIs and WebSocket | NEXUS-Link" />
+<meta property="og:description"
+      content="Dig into REST APIs and WebSocket" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/golang_api_wss.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/golang_api_wss.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Comprehensive Guide to REST APIs and WebSocket
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/golang_api_wss_hu82e903eaa01df7fce432470cf728b5e1_425194_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_api_wss_hu82e903eaa01df7fce432470cf728b5e1_425194_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_api_wss_hu82e903eaa01df7fce432470cf728b5e1_425194_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_api_wss_hu82e903eaa01df7fce432470cf728b5e1_425194_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_api_wss_hu82e903eaa01df7fce432470cf728b5e1_425194_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h1 id="comprehensive-guide-to-rest-apis-and-websocket">Comprehensive Guide to REST APIs and WebSocket</h1>
+<h1 id="introduction"><strong>Introduction</strong></h1>
+<p>In the evolving landscape of web development, understanding the mechanisms for client-server communication is crucial. This guide embarks on a detailed exploration of REST APIs and WebSocket, two fundamental technologies enabling modern web interactions. Through this journey, we aim to provide a solid foundation in both, enriched with practical integration tips to empower your projects.</p>
+<hr>
+<h2 id="part-i-rest-api-deep-dive"><strong>Part I: REST API Deep Dive</strong></h2>
+<h3 id="introduction-to-rest-apis"><strong>Introduction to REST APIs</strong></h3>
+<p><strong>Definition and Principles of REST:</strong> REST (Representational State Transfer) is an architectural style that defines a set of constraints for creating web services. It emphasizes scalable interactions between clients and servers, using stateless communications where each request from any client contains all the information needed by the server to fulfill the request.</p>
+<p><strong>REST Architectural Constraints and Characteristics:</strong> Key to RESTful services is adherence to six architectural constraints: uniform interface, stateless, cacheable, client-server, layered system, and code on demand. These principles guide the design of scalable, flexible, and efficient web services.</p>
+<h3 id="components-of-rest-apis"><strong>Components of REST APIs</strong></h3>
+<p><strong>Understanding Resources, URIs, and Methods:</strong> At the heart of REST are resources, uniquely identifiable via Uniform Resource Identifiers (URIs) and manipulated using standard HTTP methods (GET, POST, PUT, DELETE).</p>
+<p><strong>Headers, Request/Response Body, and Status Codes:</strong> HTTP headers play a critical role in REST APIs, carrying metadata for request and response messages. The body of these messages often contains resource representations, while status codes provide succinct feedback about the outcome of an HTTP request.</p>
+<h3 id="designing-restful-services"><strong>Designing RESTful Services</strong></h3>
+<p><strong>Best Practices for API Endpoints Design:</strong> Crafting intuitive and consistent API endpoints enhances usability and maintainability. This involves following naming conventions, using nouns for resources, and employing HTTP methods precisely.</p>
+<p><strong>Versioning Strategies for Maintaining API Lifecycle:</strong> Effective versioning strategies, such as URI versioning or using custom request headers, ensure backward compatibility and smooth transitions between different API versions.</p>
+<h3 id="securing-rest-apis"><strong>Securing REST APIs</strong></h3>
+<p><strong>Authentication Mechanisms:</strong> Secure REST APIs employ robust authentication mechanisms like OAuth for delegated authorization or JWT (JSON Web Tokens) for compact, URL-safe means of representing claims between parties.</p>
+<p><strong>Encryption and Secure Communication:</strong> Implementing HTTPS ensures encrypted data transfer, protecting against eavesdropping and tampering.</p>
+<h3 id="testing-and-documentation"><strong>Testing and Documentation</strong></h3>
+<p><strong>Tools for Testing REST APIs:</strong> Tools like Postman and Swagger simplify testing, allowing developers to send requests to the API and review responses without writing code.</p>
+<p><strong>Importance of Comprehensive API Documentation:</strong> Good documentation is indispensable for API success, providing clear guidelines and examples for developers to effectively use the API.</p>
+<hr>
+<h2 id="part-ii-websocket-journey"><strong>Part II: WebSocket Journey</strong></h2>
+<h3 id="introduction-to-websocket"><strong>Introduction to WebSocket</strong></h3>
+<p><strong>Understanding WebSocket Protocol:</strong> WebSocket facilitates full-duplex communication channels over a single TCP connection, enabling real-time data flow between clients and servers.</p>
+<p><strong>Differences between WebSocket and HTTP:</strong> Unlike the stateless, request-response model of HTTP, WebSocket provides a persistent connection that allows for ongoing communication after the initial handshake.</p>
+<h3 id="establishing-websocket-connections"><strong>Establishing WebSocket Connections</strong></h3>
+<p><strong>Handshake Process:</strong> Establishing a WebSocket connection involves a handshake phase, where a client requests an upgrade from HTTP to WebSocket, initiating a continuous connection.</p>
+<p><strong>WebSocket URLs:</strong> WebSocket connections are initiated through &ldquo;ws://&rdquo; or &ldquo;wss://&rdquo; (WebSocket Secure) protocols, indicating unencrypted and encrypted connections, respectively.</p>
+<h3 id="data-transfer-with-websocket"><strong>Data Transfer with WebSocket</strong></h3>
+<p><strong>Sending and Receiving Messages:</strong> WebSocket supports both text and binary data, enabling a wide range of applications from chat services to binary file transfers.</p>
+<p><strong>Handling Connection Closure:</strong> Properly managing connection closures ensures resource cleanup and stable application behavior.</p>
+<h3 id="use-cases-for-websocket"><strong>Use Cases for WebSocket</strong></h3>
+<p><strong>Real-time Applications:</strong> WebSocket shines in scenarios requiring real-time data exchange, such as in chat applications, live notifications, and collaborative editing tools.</p>
+<p><strong>Streaming Data:</strong> It is also ideal for streaming applications, delivering live updates like sports scores or stock market tickers without needing to refresh the page.</p>
+<h3 id="securing-websocket-connections"><strong>Securing WebSocket Connections</strong></h3>
+<p><strong>Security Considerations:</strong> Despite its strengths, WebSocket requires careful consideration regarding security. Implementing &ldquo;wss://&rdquo; is crucial for encrypted communications.</p>
+<p><strong>Best Practices:</strong> Additional security practices include validating input data to prevent common web vulnerabilities.</p>
+<hr>
+<h2 id="part-iii-combining-rest-api-and-websocket"><strong>Part III: Combining REST API and WebSocket</strong></h2>
+<h3 id="integrating-rest-apis-with-websocket"><strong>Integrating REST APIs with WebSocket</strong></h3>
+<p>Scenario-based examples highlight how REST APIs can provide initial state setup, with WebSocket taking over for real-time updates, combining the best of both worlds for dynamic, interactive applications.</p>
+<h3 id="practical-integration-tips"><strong>Practical Integration Tips</strong></h3>
+<p>Practical Integration Tips
+Setting Up a REST API Server in Golang with Echo:</p>
+<p>Echo is a highly performant and minimalist Go web framework that makes it straightforward to set up RESTful APIs. It provides extensive support for routing, middleware, and error handling, making it a great choice for building efficient and scalable web applications in Go.</p>
+<p>Example REST API Server with Echo:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;github.com/labstack/echo/v4&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">echo</span>.<span style="color:#a6e22e">New</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Route for GET request at &#34;/ping&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/ping&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">echo</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">JSON</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusOK</span>, <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">string</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;pong&#34;</span>,
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Start the server on localhost port 8080
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">Start</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In this simple Echo server example, a route is set up to respond to a GET request at /ping with a JSON response { &ldquo;message&rdquo;: &ldquo;pong&rdquo; }. The echo.New() function creates a new instance of Echo, and the e.GET method defines a route for GET requests. The e.Start method listens on the specified port and serves the API.</p>
+<p>Echo&rsquo;s router matches incoming requests against registered routes in a fast and straightforward manner, and its modular design allows for easy integration of middleware to handle tasks such as logging, authorization, and request parsing, making it highly adaptable for various web application needs.</p>
+<p>Utilizing Echo for your Go-based REST API server offers a balance between simplicity and power, providing all the necessary tools to build a robust API with minimal boilerplate code.</p>
+<p>Establishing a WebSocket Server and Client Connection in Golang: The Go standard library provides support for WebSocket through the golang.org/x/net/websocket package, enabling the development of WebSocket servers and clients without external dependencies. For more feature-rich implementations, third-party libraries like Gorilla WebSocket offer additional functionalities and ease of use.</p>
+<p>Example with Gorilla WebSocket: The Gorilla WebSocket package is a widely used library that simplifies working with WebSocket connections in Go applications. It provides easy-to-use APIs for creating WebSocket servers and handling client connections.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;github.com/gorilla/websocket&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">upgrader</span> = <span style="color:#a6e22e">websocket</span>.<span style="color:#a6e22e">Upgrader</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">CheckOrigin</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handler</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">upgrader</span>.<span style="color:#a6e22e">Upgrade</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">messageType</span>, <span style="color:#a6e22e">message</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">ReadMessage</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">WriteMessage</span>(<span style="color:#a6e22e">messageType</span>, <span style="color:#a6e22e">message</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/ws&#34;</span>, <span style="color:#a6e22e">handler</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;0.0.0.0:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This WebSocket server echoes back any messages it receives. The upgrader.Upgrade method is used to upgrade the HTTP server connection to the WebSocket protocol.</p>
+<p>These Go-based examples offer a glimpse into setting up RESTful services and WebSocket connections, showcasing Go&rsquo;s capability to build efficient, real-time web applications.</p>
+<h2 id="conclusion"><strong>Conclusion</strong></h2>
+<p>Choosing between REST API and WebSocket depends on your application&rsquo;s specific needs—REST for stateless interactions and WebSocket for continuous, real-time communication. As web technologies evolve, staying informed and adaptable ensures you can leverage these powerful tools to their fullest potential.</p>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>

@@ -10,9 +10,9 @@
     <atom:link href="https://m6l1.github.io/tags/c/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dark Side of C Programming Language</title>
-      <link>https://m6l1.github.io/posts/c-pitfalls/</link>
+      <link>https://m6l1.github.io/technotes/c-pitfalls/</link>
       <pubDate>Tue, 21 Feb 2023 20:02:15 +0700</pubDate>
-      <guid>https://m6l1.github.io/posts/c-pitfalls/</guid>
+      <guid>https://m6l1.github.io/technotes/c-pitfalls/</guid>
       <description>Pitfalls and tricks of C programming language</description>
     </item>
   </channel>
