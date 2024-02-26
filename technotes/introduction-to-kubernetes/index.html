@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Introduction to Kubernetes (K8s) | NEXUS-Link 
+</title>
+<meta name="description" content="A brief introduction of K8S" />
+<meta property="og:title" content="Introduction to Kubernetes (K8s) | NEXUS-Link" />
+<meta name="twitter:title" content="Introduction to Kubernetes (K8s) | NEXUS-Link" />
+<meta itemprop="name" content="Introduction to Kubernetes (K8s) | NEXUS-Link" />
+<meta name="application-name" content="Introduction to Kubernetes (K8s) | NEXUS-Link" />
+<meta property="og:description"
+      content="A brief introduction of K8S" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/introduction-to-kubernetes/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/cncf.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/cncf.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Introduction to Kubernetes (K8s)
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/cncf_hubd86161a9657a0db3a59d7ac6bcdc59c_438808_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/cncf_hubd86161a9657a0db3a59d7ac6bcdc59c_438808_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/cncf_hubd86161a9657a0db3a59d7ac6bcdc59c_438808_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/cncf_hubd86161a9657a0db3a59d7ac6bcdc59c_438808_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/cncf_hubd86161a9657a0db3a59d7ac6bcdc59c_438808_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h1 id="introduction-to-kubernetes-k8s">Introduction to Kubernetes (K8s)</h1>
+<p>In the evolving landscape of cloud computing, Kubernetes (K8s) has emerged as a pivotal force in container orchestration, enabling businesses to deploy, manage, and scale applications with unprecedented efficiency and flexibility. Developed by Google and now maintained by the Cloud Native Computing Foundation (CNCF), Kubernetes orchestrates computing, networking, and storage infrastructure on behalf of user workloads.</p>
+<h2 id="what-is-kubernetes">What is Kubernetes?</h2>
+<p>Kubernetes is an open-source platform designed to automate the deployment, scaling, and operation of application containers across clusters of hosts. It provides the framework to run distributed systems resiliently, taking care of scaling and failover for your application, providing deployment patterns, and more.</p>
+<h2 id="key-features-of-kubernetes">Key Features of Kubernetes</h2>
+<ul>
+<li>Automated Scheduling: Kubernetes automatically schedules containers based on resource requirements and other constraints, without sacrificing availability.</li>
+<li>Self-Healing Capabilities: It restarts failed containers, replaces and reschedules containers when nodes die, kills containers that don&rsquo;t respond to user-defined health checks, and doesn&rsquo;t advertise them to clients until they are ready to serve.</li>
+<li>Automated Rollouts and Rollbacks: Kubernetes progressively rolls out changes to your application or its configuration, monitoring application health to ensure it doesn&rsquo;t kill all your instances at the same time.</li>
+<li>Horizontal Scaling: With Kubernetes, you can scale your application up and down with a simple command, a UI, or automatically based on CPU usage.</li>
+<li>Service Discovery and Load Balancing: Kubernetes assigns containers their own IP addresses and a single DNS name for a set of containers and can balance the load between them.</li>
+</ul>
+<h2 id="architecture-and-components">Architecture and Components</h2>
+<p>Kubernetes follows a client-server architecture. At its core, the system can be divided into two main components: the Master node and Worker nodes.</p>
+<h3 id="master-node">Master Node</h3>
+<p>The Master node is responsible for managing the cluster. It makes global decisions about the cluster (e.g., scheduling), and detects and responds to cluster events (e.g., starting up a new container when a deployment&rsquo;s replicas field is unsatisfied).</p>
+<p>Key components of the Master node include:</p>
+<ul>
+<li>API Server: Acts as the front end for Kubernetes. The users, management tools, and cluster components communicate through it.</li>
+<li>etcd: A key-value store used as Kubernetes&rsquo; backing store for all cluster data.</li>
+<li>Scheduler: Watches for newly created Pods with no assigned node and selects a node for them to run on.</li>
+<li>Controller Manager: Runs controller processes, which are background threads that handle routine tasks in the cluster.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># demo configuration for the master node</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kubeadm.k8s.io/v1beta2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ClusterConfiguration</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kubernetesVersion</span>: <span style="color:#e6db74">&#34;1.20.0&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">controlPlaneEndpoint</span>: <span style="color:#e6db74">&#34;master-node.example.com:6443&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">networking</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">podSubnet</span>: <span style="color:#e6db74">&#34;192.168.0.0/16&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">serviceSubnet</span>: <span style="color:#e6db74">&#34;10.96.0.0/12&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiServer</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">extraArgs</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">authorization-mode</span>: <span style="color:#e6db74">&#34;Node,RBAC&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">controllerManager</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">extraArgs</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">node-cidr-mask-size</span>: <span style="color:#e6db74">&#34;24&#34;</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kubeproxy.config.k8s.io/v1alpha1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">KubeProxyConfiguration</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">mode</span>: <span style="color:#e6db74">&#34;iptables&#34;</span>
+</span></span></code></pre></div><p><strong>apiVersion and kind</strong>: Specify the API version and resource type the configuration file adheres to.</p>
+<p><strong>kubernetesVersion</strong>: Specifies the version of Kubernetes to install.</p>
+<p><strong>controlPlaneEndpoint</strong>: The address of the cluster’s control panel (Master node), which needs to be replaced with the actual address or domain name.</p>
+<p><strong>networking</strong>: Configures the cluster’s network, including the pod network and service network subnets.</p>
+<p><strong>podSubnet</strong>: Specifies the CIDR range for the pod network, which should be consistent with your network plugin configuration, such as Calico, Flannel, etc.</p>
+<p><strong>serviceSubnet</strong>: Specifies the CIDR range for the service network.</p>
+<p><strong>apiServer</strong> and <strong>controllerManager</strong>: Configure additional parameters for the API server and controller manager.</p>
+<p><strong>KubeProxyConfiguration</strong>: Configures the behavior of kube-proxy, for example, using iptables mode.</p>
+<h3 id="worker-nodes">Worker Nodes</h3>
+<p>Worker nodes host the Pods that are the components of the application workload. Each worker node is managed by the Master node and contains the necessary services to run Pods, including the Docker runtime and the kubelet.</p>
+<p>Key components of Worker nodes include:</p>
+<ul>
+<li>kubelet: An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.</li>
+<li>kube-proxy: Maintains network rules on nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster.</li>
+<li>Container Runtime: The software that is responsible for running containers.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># Obtain the kubeadm join command from the Master node</span>
+</span></span><span style="display:flex;"><span>$ kubeadm join &lt;control-plane-host&gt;:&lt;port&gt; --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</span></span></code></pre></div><p><code>&lt;control-plane-host&gt;:&lt;port&gt;</code> is the address and port of the Master node (usually 6443), <code>&lt;token&gt;</code> is the token used to join the cluster, and <code>&lt;hash&gt;</code> is the hash value of the CA certificate used in the node discovery process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># Execute the kubeadm join command on the Worker node</span>
+</span></span><span style="display:flex;"><span>$ sudo kubeadm join &lt;control-plane-host&gt;:&lt;port&gt; --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</span></span></code></pre></div><p>On the Worker node you are preparing to join the cluster, execute the kubeadm join command obtained in the previous step as the root user (or using sudo).</p>
+<p><code>&lt;token&gt;</code> have an expiration limit. If the kubeadm join command shows that the token is invalid, you may need to generate a new join token on the Master node. You can use the command kubeadm token create &ndash;print-join-command to generate a new kubeadm join command, including a new token and hash.
+Ensure the network configuration of the Worker node allows it to communicate with the Master node, including the opening of the appropriate ports (such as TCP 6443) and without network isolation.
+In this way, the configuration and joining process of the Worker node are relatively simple, mainly relying on the kubeadm join command provided by the Master node to complete automatically.</p>
+<h2 id="key-concepts">Key Concepts</h2>
+<ul>
+<li>Pods: The smallest deployable units of computing that can be created and managed in Kubernetes.</li>
+<li>Services: An abstraction which defines a logical set of Pods and a policy by which to access them.</li>
+<li>Deployments: Provides declarative updates for Pods and ReplicaSets.</li>
+<li>Volumes: Provides a directory, possibly with data in it, which is accessible to the containers in a pod.</li>
+<li>Namespaces: Kubernetes supports multiple virtual clusters backed by the same physical cluster. These virtual clusters are called namespaces.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Kubernetes has revolutionized the way organizations deploy, manage, and scale their applications. With its robust framework for container orchestration, Kubernetes provides the tools needed to build a more efficient, resilient, and scalable cloud-native infrastructure. As businesses continue to move towards microservices architectures, the role of Kubernetes in enabling this transition cannot be overstated. Understanding the fundamentals of Kubernetes is crucial for developers, system administrators, and IT professionals aiming to leverage the full potential of cloud-native technologies.</p>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>

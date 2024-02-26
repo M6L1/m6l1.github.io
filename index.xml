@@ -51,6 +51,13 @@
       <description>Pitfalls and tricks of C programming language</description>
     </item>
     <item>
+      <title>Introduction to Kubernetes (K8s)</title>
+      <link>https://m6l1.github.io/technotes/introduction-to-kubernetes/</link>
+      <pubDate>Sun, 18 Dec 2022 11:10:36 +0800</pubDate>
+      <guid>https://m6l1.github.io/technotes/introduction-to-kubernetes/</guid>
+      <description>A brief introduction of K8S</description>
+    </item>
+    <item>
       <title>About</title>
       <link>https://m6l1.github.io/about/</link>
       <pubDate>Sat, 18 Dec 2021 11:10:36 +0800</pubDate>
