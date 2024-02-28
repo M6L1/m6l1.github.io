@@ -2,11 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://m6l1.github.io/tags/c/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/categories/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/golang/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
     <loc>https://m6l1.github.io/</loc>
-    <lastmod>2023-02-25T20:02:15+07:00</lastmod>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/programming/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/technotes/</loc>
-    <lastmod>2023-02-25T20:02:15+07:00</lastmod>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/categories/technotes/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/technotes/using-c-in-golang/</loc>
+    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/api/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
@@ -17,25 +38,13 @@
     <loc>https://m6l1.github.io/tags/backend/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>https://m6l1.github.io/categories/</loc>
-    <lastmod>2023-02-23T11:11:36+07:00</lastmod>
-  </url><url>
     <loc>https://m6l1.github.io/tags/engineer/</loc>
-    <lastmod>2023-02-23T11:11:36+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/golang/</loc>
-    <lastmod>2023-02-23T11:11:36+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/programming/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/categories/recruitment/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/recruitment/</loc>
-    <lastmod>2023-02-23T11:11:36+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/tags/database/</loc>
@@ -67,12 +76,6 @@
   </url><url>
     <loc>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</loc>
     <lastmod>2023-02-22T20:02:15+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/categories/technotes/</loc>
-    <lastmod>2023-02-22T20:02:15+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/c/</loc>
-    <lastmod>2023-02-21T20:02:15+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/technotes/c-pitfalls/</loc>
     <lastmod>2023-02-21T20:02:15+07:00</lastmod>

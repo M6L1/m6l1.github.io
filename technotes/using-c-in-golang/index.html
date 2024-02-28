@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Using C in golang | NEXUS-Link 
+</title>
+<meta name="description" content="How to use C in golang?" />
+<meta property="og:title" content="Using C in golang | NEXUS-Link" />
+<meta name="twitter:title" content="Using C in golang | NEXUS-Link" />
+<meta itemprop="name" content="Using C in golang | NEXUS-Link" />
+<meta name="application-name" content="Using C in golang | NEXUS-Link" />
+<meta property="og:description"
+      content="How to use C in golang?" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/using-c-in-golang/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/golang_c.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/golang_c.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Using C in golang
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h3 id="code-reuse">Code Reuse</h3>
+<p>There are generally several reasons for wanting to use C language code within Go language:</p>
+<ul>
+<li>Learning how to reuse existing C language code from old projects can reduce the development time for new projects.</li>
+<li>Golang is a much younger language, and the available libraries for reference and use are relatively few.</li>
+<li>Implementing parts that require extensive computation in C language to enhance overall performance.</li>
+<li><del>I only know how to write in C language.</del></li>
+</ul>
+<p>Next, we will explain in detail how to use C language code in Go language.</p>
+<h3 id="existing-c-code">Existing C Code</h3>
+<p>Here is listed a piece of C language code, which includes a function called ping(). This function, after receiving a passed-in network address string, will invoke the system&rsquo;s ping to send an ICMP request to this network address and return the result. If there is no response after 2 seconds, ping will also terminate and return the result.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Macro defines
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define PING_CMD        &#34;/sbin/ping&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define TIME_OUT        (2)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define STR_PING_ENG    &#34;PING&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define STR_TX_ENG      &#34;Tx Pkts&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define STR_RX_ENG      &#34;Rx Pkts&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define STR_LOSS_ENG    &#34;Pkt Loss&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#define DEST_LENGTH     (64)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// struct for storing ping result
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> _PING_RESULT_T {
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">char</span> dest[DEST_LENGTH <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>];
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> txPkts;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> rxPkts;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">float</span> pktLoss;
+</span></span><span style="display:flex;"><span>	} PING_RESULT_T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ping function
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">ping</span> (<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>ip) {
+</span></span><span style="display:flex;"><span>	    PING_RESULT_T ping_result;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">char</span> cmdline[<span style="color:#ae81ff">160</span>], buf[<span style="color:#ae81ff">80</span>];
+</span></span><span style="display:flex;"><span>	    FILE <span style="color:#f92672">*</span>fp;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">if</span> (ip <span style="color:#f92672">==</span> NULL)
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">goto</span> FINISHED;
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">memset</span>(<span style="color:#f92672">&amp;</span>ping_result, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(PING_RESULT_T));
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">strncpy</span>(ping_result.dest, ip, DEST_LENGTH);
+</span></span><span style="display:flex;"><span>	    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// Generate ping command
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">sprintf</span> (cmdline, <span style="color:#e6db74">&#34;%s -t %d -c 1 -q %s&#34;</span>, PING_CMD, TIME_OUT, ip);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// popen() executes given command and return command result
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">if</span> ( (fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">popen</span>(cmdline, <span style="color:#e6db74">&#34;r&#34;</span>)) <span style="color:#f92672">==</span> NULL )
+</span></span><span style="display:flex;"><span>	        <span style="color:#66d9ef">goto</span> FINISHED;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// Parse command result
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#66d9ef">while</span> (<span style="color:#a6e22e">fgets</span> (buf, <span style="color:#ae81ff">80</span>, fp) <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>	        <span style="color:#a6e22e">sscanf</span> (buf, <span style="color:#e6db74">&#34;%c packets transmitted, %c packets received, %f%% packet loss&#34;</span>,
+</span></span><span style="display:flex;"><span>	        <span style="color:#f92672">&amp;</span>ping_result.txPkts,
+</span></span><span style="display:flex;"><span>	        <span style="color:#f92672">&amp;</span>ping_result.rxPkts,
+</span></span><span style="display:flex;"><span>	        <span style="color:#f92672">&amp;</span>ping_result.pktLoss);
+</span></span><span style="display:flex;"><span>	    }
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">fclose</span> (fp);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#75715e">// Print out
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">fprintf</span>(stderr,<span style="color:#e6db74">&#34;%s %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%s: %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%s: %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%s: %1.1f%%</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>	        STR_PING_ENG, ip,
+</span></span><span style="display:flex;"><span>	        STR_TX_ENG, ping_result.txPkts,
+</span></span><span style="display:flex;"><span>	        STR_RX_ENG, ping_result.rxPkts,
+</span></span><span style="display:flex;"><span>	        STR_LOSS_ENG, ping_result.pktLoss);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	FINISHED:
+</span></span><span style="display:flex;"><span>	    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Comment out main() function to avoid duplicate symbol
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// int main (int argc, char* argv[]) {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//     ping (&#34;www.google.com&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//     return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// }
+</span></span></span></code></pre></div><p>Please note that the main() function in this code snippet has been commented out because when integrating this code into Go language, the implementation of the main() function is completed by Go language. In both C and Go languages, a standalone program&rsquo;s main() function must follow the <strong>one and only one</strong> rule.</p>
+<h3 id="implementation-of-golang">Implementation of golang</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// #include &lt;stdlib.h&gt;  // for free() function of C library
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// #include &#34;myping.c&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert go string to C string (malloc)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">cString</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#e6db74">&#34;www.google.com&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Call C function from included C source file (myping.c)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">ping</span>(<span style="color:#a6e22e">cString</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Free C variable
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">cString</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Let&rsquo;s explain line by line, starting with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span></code></pre></div><p>In Go language programs, packages are used as units of division, and this package concept is similar to the libraries in C language, so the following two lines mean almost the same in both Go and C languages:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;  // Introducing the standard IO library in C language</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	import <span style="color:#e6db74">&#34;fmt&#34;</span>        <span style="color:#75715e">// Introducing the formatted IO library in Go language
+</span></span></span></code></pre></div><p>And in Go language, a file that contains the main() function must import package main to indicate that this file is the entry point of the entire program. Next is this line:</p>
+<!-- raw HTML omitted -->
+<p>This is how to reference C language libraries in Go language. Yes, you need to add the comment symbol // in front. Because without commenting it out, Go&rsquo;s compiler would directly use Go language&rsquo;s syntax rules to compile, which would certainly fail. Next is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#75715e">// #include &#34;myping.c&#34;
+</span></span></span></code></pre></div><p>This is also C language syntax; this line includes the entire <strong>myping.c</strong> file. The following code is not commented, indicating it is Go syntax. The following line is how Go language recognizes that the chunk of comments at the beginning is actually C language code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span></code></pre></div><p>Please note, this line must immediately follow the commented C language code, with no other imports or blank lines in between, and it must be <strong>written on a single line alone</strong>, without using Go&rsquo;s multiple import syntax:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Generally, when importing many packages at once, it can be done like this
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;package A&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;package B&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;package C&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span></code></pre></div><p>However, when importing C code, the comment block following the C code should not be written like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// It cannot be done like this when there is a C language block in front
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span></code></pre></div><p>Because by doing so, Go would treat the previously commented C language code as pure comments, thus making it completely inaccessible in the program, so you can only do it like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span></code></pre></div><p>Returning to the original code, the next line is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span></code></pre></div><p><strong>package</strong> unsafe contains operations for converting between different types of pointers in Go language, with the type unsafe.Pointer conceptually similar to void* in C language. Continuing on:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span></code></pre></div><p>Go&rsquo;s main() function does not return a value, nor does it accept any parameters; this is the only way to write the main() function. As for the final brace <strong>{</strong>, its <strong>position is fixed</strong>; placing it not directly after the function name would fail to compile! Perhaps in the future, another article will be written about the programming style of Go language. Before continuing to analyze the code, let&rsquo;s first explain how to use the syntax of functions from the imported package in Go language:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	{<span style="color:#a6e22e">package_name</span>}.{<span style="color:#a6e22e">function_name</span>}
+</span></span></code></pre></div><p>Because the imported <strong>package is &ldquo;C&rdquo;</strong>, the types in the following code are all <strong>C.{function_name}</strong>. First, convert a Go language string to a C language string:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">cString</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#e6db74">&#34;www.google.com&#34;</span>)
+</span></span></code></pre></div><p>In this line of code, <strong>&ldquo;<a href="https://www.google.com">www.google.com</a>&rdquo;</strong> is a Go language string, which, through the C.CString method, will be converted into a C string. Because this method allocates memory, you must perform a free action after use. Although Go language has a garbage collection mechanism, it currently does not automatically manage memory allocated by C language. Next is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">ping</span>(<span style="color:#a6e22e">cString</span>)
+</span></span></code></pre></div><p>This line calls a C language function written in the myping.c file, using it in a way similar to how it&rsquo;s done in C language, just with an added <strong>C</strong>. before invoking the function.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">cString</span>))
+</span></span></code></pre></div><p>Finally, free the cString variable that is no longer needed, using C&rsquo;s free() function. Since the C.free() function accepts an unsafe.Pointer, and Go is a <a href="https://en.wikipedia.org/wiki/Strong_and_weak_typing">strongly typed</a> language that does not accept implicit type conversion, here you must convert the C string cString into a Go language unsafe.Pointer before passing it in. A meticulous programmer might wonder, since cString is already a C language string, and C.free() calls a function from the C standard library, what does it have to do with unsafe.Pointer? Why is there a need for pointer type conversion? Let&rsquo;s change the last line of code to the following and recompile to see the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">cString</span>)
+</span></span></code></pre></div><p>The Go compiler does not accept this approach, because:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">cannot</span> <span style="color:#a6e22e">use</span> <span style="color:#a6e22e">cString</span> (<span style="color:#66d9ef">type</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">char</span>) <span style="color:#a6e22e">as</span> <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#a6e22e">in</span> <span style="color:#a6e22e">argument</span> <span style="color:#a6e22e">to</span> <span style="color:#a6e22e">_Cfunc_free</span>
+</span></span></code></pre></div><p>It turns out, the C functions and C types that appear callable are all wrapped with Go language&rsquo;s own layer. A <strong>char</strong>* in C language is actually *C.char in Go language, and the <strong>free()</strong> function from the C standard library is actually <strong>_Cfunc_free</strong> in Go language.</p>
+<p>Put <strong>myping.c</strong> and <strong>myping.go</strong>, which includes the <strong>main()</strong> function, in the same directory and execute:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>	go run myping.go
+</span></span></code></pre></div><p>The Go language correctly called the C language code, resulting in the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>	PING www.google.com
+</span></span><span style="display:flex;"><span>	Tx Pkts: <span style="color:#ae81ff">114</span>
+</span></span><span style="display:flex;"><span>	Rx Pkts: <span style="color:#ae81ff">49</span>
+</span></span><span style="display:flex;"><span>	Pkt Loss: 0.0%
+</span></span></code></pre></div><p>The numbers in the result will vary depending on the network connection status.</p>
+<h3 id="continuing-exploration">Continuing Exploration</h3>
+<p>So far, we have successfully called a C language function we wrote ourselves. But what if we want to call standard functions from the C language in Go? Suppose we want to calculate the length of a C string, for which we need to use the <strong>strlen()</strong> function. To use this function, we must include the string.h from the C language library. Since myping.c already includes this <a href="https://en.wikipedia.org/wiki/Include_directive">header file</a>, we can directly call it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// cString = &#34;www.google.com&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	println(<span style="color:#e6db74">&#34;\nstrlen(cString):&#34;</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">strlen</span>(<span style="color:#a6e22e">cString</span>))
+</span></span></code></pre></div><p>The result of the execution is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>	<span style="color:#a6e22e">strlen</span>(cString)<span style="color:#f92672">:</span> <span style="color:#ae81ff">14</span>
+</span></span></code></pre></div><p>So, is it possible to directly write programs in C language within Go language, without importing already written code through the <strong>#include “xxx.c”</strong> method? The answer is affirmative; you can add C code before <strong>import &ldquo;C&rdquo;</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">//void sayHelloTo(char *name) {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//    fprintf(stderr, &#34;Hello, %s.\n&#34;, name);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span></code></pre></div><p>Then, invoke using the <strong>C.{function_name}</strong> pattern:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// cString = &#34;www.google.com&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">sayHelloTo</span>(<span style="color:#a6e22e">cString</span>)
+</span></span></code></pre></div><p>The result of the execution is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>	Hello, www.google.com.
+</span></span></code></pre></div><p>If there is a lot of C code that needs to be added, Go language indeed supports commenting out C language code in the following way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">/* All the code here is commented out C language code */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span></code></pre></div><h3 id="type-conversion">Type Conversion</h3>
+<p>From the example above, it&rsquo;s clear that since Go language does not automatically perform type conversion, and the types in C language are actually encapsulated by an additional Go layer, using them is not as intuitive as it seems. So, how should one convert types between these two? First is for already processed strings, and the method for converting strings between these two languages is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Declare a C language string named cString
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	char *cString = &#34;This is a c string.&#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert the C string to a Go string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goString1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">GoString</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cString</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert the first 5 characters of the C string to a Go string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goString2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">GoStringN</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cString</span>, <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert the first 5 characters of the C string to a Go byte array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goByteArray</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">GoBytes</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cString</span>), <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the values of these 3 Go types
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;goString1 =&#34;</span>, <span style="color:#a6e22e">goString1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;goString2 =&#34;</span>, <span style="color:#a6e22e">goString2</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;goByteAry =&#34;</span>, <span style="color:#a6e22e">goByteArray</span>)
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert a Go string to another C string (allocate new memory)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">anotherCString</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#a6e22e">goString1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Free the allocated memory
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">anotherCString</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>The syntax for converting between non-string basic types is similar to the way type conversion is done in C language, and it goes like this:</p>
+<pre tabindex="0"><code class="language-quote" data-lang="quote">	NewTypeVariable = NewType(OldTypeVariable)
+</code></pre><p>When incorporating C and Go languages, it looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">C</span>.<span style="color:#66d9ef">float</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">double</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Converting from C language types to Go language types
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">GoVariable</span> = <span style="color:#a6e22e">GoType</span>(<span style="color:#a6e22e">CVariable</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Converting from Go language types to C language types
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">CVariable</span> = <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CType</span>(<span style="color:#a6e22e">GoVariable</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The name of char in C language in Go language
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">char</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">schar</span> (<span style="color:#a6e22e">signed</span> <span style="color:#a6e22e">char</span>), <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">uchar</span> (<span style="color:#a6e22e">unsigned</span> <span style="color:#a6e22e">char</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The name of short in C language in Go language
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">short</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">ushort</span> (<span style="color:#a6e22e">unsigned</span> <span style="color:#a6e22e">short</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The name of int in C language in Go language
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">C</span>.<span style="color:#66d9ef">uint</span> (<span style="color:#a6e22e">unsigned</span> <span style="color:#66d9ef">int</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The name of long in C language in Go language
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">long</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">ulong</span> (<span style="color:#a6e22e">unsigned</span> <span style="color:#a6e22e">long</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The name of long long in C language in Go language
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">longlong</span> (<span style="color:#a6e22e">long</span> <span style="color:#a6e22e">long</span>), <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">ulonglong</span> (<span style="color:#a6e22e">unsigned</span> <span style="color:#a6e22e">long</span> <span style="color:#a6e22e">long</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The name of floating-point numbers in C language in Go language
+</span></span></span></code></pre></div><p>The problem is that C language types are encapsulated by an additional Go layer, so the names of C language types are completely different from what one might initially think. <a href="http://golang.org/cmd/cgo/#hdr-Go_references_to_C">golang.org</a> provides explanations for this part, listed as follows:</p>
+<p>Here, taking float as an example, demonstrates how to convert between types in the two languages:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Declare a C language float named cFloat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	float cFloat = 3.1415926;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert C float to Go float32
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goFloat32</span> <span style="color:#f92672">:=</span> float32(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cFloat</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of goFloat32
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;goFloat32 =&#34;</span>, <span style="color:#a6e22e">goFloat32</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert Go float32 back to C float
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cFloat</span> = <span style="color:#a6e22e">C</span>.float(<span style="color:#a6e22e">goFloat32</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Converting between arrays is also not a problem:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	/ Declare a C language array named cAry, with a type of int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	int cAry[] = {1, 2, 3, 4, 5};
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Declare a slice named goAry
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goAry</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Iterate over the C language array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">element</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cAry</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Add each element obtained from iterating the C array to the Go slice
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">goAry</span> = append(<span style="color:#a6e22e">goAry</span>, int(<span style="color:#a6e22e">element</span>))
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of the Go language array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;    goAry =&#34;</span>, <span style="color:#a6e22e">goAry</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Iterate over the C language array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">idx</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cAry</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Access the value at each index of the C array using [idx]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cAry</span>[<span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">idx</span>)] = <span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">goAry</span>[<span style="color:#a6e22e">idx</span>])
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of the C language array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;   C.cAry =&#34;</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cAry</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Above is the method for converting arrays between C and Go languages. Please note that when accessing C.cAry[idx], the internal idx type is Go language&rsquo;s int, which must be converted to C language&rsquo;s C.int to work.</p>
+<p>Additionally, composite types such as struct or union are also common in C language. Here, the method for conversion is introduced, starting with the conversion from struct:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Declare a struct named cStudent
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	struct cStudent {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">		char *name;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">		int id;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	};
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Initialize cStruct object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	struct cStudent cStruct = {&#34;Tom&#34;, 3};
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Declare a struct named goStudent
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">goStudent</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">id</span>   <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert C struct to Go struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goStruct</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">goStudent</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">name</span>: <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">GoString</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cStruct</span>.<span style="color:#a6e22e">name</span>),
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">id</span>:   int(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cStruct</span>.<span style="color:#a6e22e">id</span>),
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of the Go language struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34; goStruct =&#34;</span>, <span style="color:#a6e22e">goStruct</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert Go struct back to C struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// Convert Go string to C string (allocate new memory)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">cString</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">CString</span>(<span style="color:#a6e22e">goStruct</span>.<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cStruct</span> = <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">struct_cStudent</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">name</span>: <span style="color:#a6e22e">cString</span>,
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">id</span>:   <span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">goStruct</span>.<span style="color:#a6e22e">id</span>),
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of the C language struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;  cStruct =&#34;</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">GoString</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cStruct</span>.<span style="color:#a6e22e">name</span>), <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cStruct</span>.<span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Free the allocated memory
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">cString</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>The concept and conversion of basic types are quite similar, the only thing to note is that when initializing, you need to prefix <strong>{struct_name}</strong> with <strong>C.struct_</strong>. Next, let&rsquo;s try converting a union, first defining the C language union we use as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">union</span> <span style="color:#a6e22e">cData</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">unsigned</span> <span style="color:#a6e22e">char</span> <span style="color:#a6e22e">bytes</span>;
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">unsigned</span> <span style="color:#a6e22e">short</span> <span style="color:#a6e22e">shortInt</span>;
+</span></span><span style="display:flex;"><span>	};
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">union</span> <span style="color:#a6e22e">cData</span> <span style="color:#a6e22e">cUnion</span> = {.<span style="color:#a6e22e">shortInt</span> = <span style="color:#ae81ff">0x4321</span>};
+</span></span></code></pre></div><p>The memory size occupied by this cUnion is that of the largest member, shortInt. Since shortInt is initialized to <code>0x4321</code> at the beginning, the value of the member bytes must be 0x21, which is 33 in decimal. Let&rsquo;s print out the just-initialized union to verify this idea:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cUnion</span>.<span style="color:#a6e22e">bytes</span>)
+</span></span></code></pre></div><p>Unexpectedly, it fails to compile right from the start, with the compiler throwing an error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>	_Cvar_cUnion.bytes undefined <span style="color:#f92672">(</span>type *<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span>byte has no field or method bytes<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>How could a union be related to a byte array? After some research on the <a href="http://golang.org/cmd/cgo/">official site</a>, it turns out that because Go language does not support C language&rsquo;s union type, a union in Go is converted into a byte array, with the array&rsquo;s length being the number of bytes occupied by the union. In this example, it can be inferred that the array&rsquo;s size is the size of <strong>short</strong>, which is 2, let&rsquo;s verify this right away:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Sizeof union =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cUnion</span>))
+</span></span></code></pre></div><p>The result obtained is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">Sizeof</span> <span style="color:#a6e22e">union</span> = <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>Programming languages and real-life crowd behavior are quite similar; behind even the biggest contradictions, there&rsquo;s merely a difference in the definition of the same thing. Now that the type is known, there&rsquo;s nothing strange about the phenomenon. Declare a byte array to receive the union and then operate on it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Declare a union named cData
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	union cData {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	    unsigned char bytes;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	    unsigned short shortInt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	};
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Initialize cUnion object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	union cData cUnion = {.shortInt = 0x4321};
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;unsafe&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Declare a struct named goData (Go language does not have union)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">goData</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">bytes</span>    <span style="color:#66d9ef">uint8</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">shortInt</span> <span style="color:#66d9ef">uint16</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Declare a goByteAry to operate on C.cUnion
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">goByteAry</span> [<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cUnion</span>)]<span style="color:#66d9ef">byte</span> = <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cUnion</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert C union to Go struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goUnion</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">goData</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">bytes</span>:    <span style="color:#a6e22e">goByteAry</span>[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">shortInt</span>: uint16(<span style="color:#a6e22e">goByteAry</span>[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">+</span> uint16(<span style="color:#a6e22e">goByteAry</span>[<span style="color:#ae81ff">1</span>])<span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">8</span>,
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of the Go language struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;  goUnion =&#34;</span>, <span style="color:#a6e22e">goUnion</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Convert Go struct back to C union
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">goByteAry</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#a6e22e">goUnion</span>.<span style="color:#a6e22e">bytes</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">goByteAry</span>[<span style="color:#ae81ff">1</span>] = uint8(<span style="color:#a6e22e">goUnion</span>.<span style="color:#a6e22e">shortInt</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Print the value of the C language union
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;   CUnion =&#34;</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">cUnion</span>)  <span style="color:#75715e">// 33 + 67 &lt;&lt; 8 = 17185
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span></code></pre></div><p>Since there&rsquo;s no union in Go language, the conversion is a bit awkward. It&rsquo;s recommended to directly use a byte array in Go language for accessing C language&rsquo;s union. Next, let&rsquo;s look at enum, as enum in both C and Go languages are constants whose values are determined at compile time, so there&rsquo;s no such thing as mutual conversion, and the access method is quite intuitive, similar to accessing regular variables in C language:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	// Declare an enum
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	enum {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	     B =  1,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	    KB =  B * 1&lt;&lt;10,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	    MB = KB * 1&lt;&lt;10,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	    TB = MB * 1&lt;&lt;10
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	};
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;B, KB, MB, TB =&#34;</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">B</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">KB</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">MB</span>, <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">TB</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Although Go has a built-in garbage collection mechanism, actively controlling memory release can improve program performance. Here is how to actively allocate/release memory in Go language using C language functions:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Allocate a memory space of 128 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pAry</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">malloc</span>(<span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Free the memory space
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pAry</span>))
+</span></span></code></pre></div><p>After memory allocation, the next step is how to operate it. Operating this memory requires some advanced knowledge of pointer arithmetic. Once you&rsquo;re prepared, you can start learning how to operate shared memory between Go and C languages.</p>
+<h3 id="extended-reading">Extended Reading</h3>
+<ul>
+<li><a href="http://blog.golang.org/c-go-cgo">C? Go? Cgo!</a></li>
+<li><a href="http://golang.org/cmd/cgo/">Command cgo</a></li>
+<li><a href="http://golang.org/pkg/unsafe/">Package unsafe</a></li>
+</ul>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>
