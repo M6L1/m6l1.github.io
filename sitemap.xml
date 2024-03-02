@@ -2,28 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://m6l1.github.io/tags/c/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/categories/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/golang/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
-  </url><url>
     <loc>https://m6l1.github.io/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/programming/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>https://m6l1.github.io/tags/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+    <lastmod>2023-03-15T09:02:15+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/technotes/</loc>
-    <lastmod>2023-02-28T11:11:11+07:00</lastmod>
+    <lastmod>2023-03-15T09:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/categories/</loc>
+    <lastmod>2023-03-02T20:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/golang/</loc>
+    <lastmod>2023-03-02T20:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/programming/</loc>
+    <lastmod>2023-03-02T20:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/</loc>
+    <lastmod>2023-03-02T20:02:15+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/categories/technotes/</loc>
+    <lastmod>2023-03-02T20:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</loc>
+    <lastmod>2023-03-02T20:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/c/</loc>
     <lastmod>2023-02-28T11:11:11+07:00</lastmod>
   </url><url>
     <loc>https://m6l1.github.io/technotes/using-c-in-golang/</loc>

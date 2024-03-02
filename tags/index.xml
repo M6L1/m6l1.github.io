@@ -6,27 +6,27 @@
     <description>Recent content in Tags on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Feb 2023 11:11:11 +0700</lastBuildDate>
+    <lastBuildDate>Thu, 02 Mar 2023 20:02:15 +0700</lastBuildDate>
     <atom:link href="https://m6l1.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>C</title>
-      <link>https://m6l1.github.io/tags/c/</link>
-      <pubDate>Tue, 28 Feb 2023 11:11:11 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/c/</guid>
-      <description></description>
-    </item>
     <item>
       <title>Golang</title>
       <link>https://m6l1.github.io/tags/golang/</link>
-      <pubDate>Tue, 28 Feb 2023 11:11:11 +0700</pubDate>
+      <pubDate>Thu, 02 Mar 2023 20:02:15 +0700</pubDate>
       <guid>https://m6l1.github.io/tags/golang/</guid>
       <description></description>
     </item>
     <item>
       <title>Programming</title>
       <link>https://m6l1.github.io/tags/programming/</link>
-      <pubDate>Tue, 28 Feb 2023 11:11:11 +0700</pubDate>
+      <pubDate>Thu, 02 Mar 2023 20:02:15 +0700</pubDate>
       <guid>https://m6l1.github.io/tags/programming/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>C</title>
+      <link>https://m6l1.github.io/tags/c/</link>
+      <pubDate>Tue, 28 Feb 2023 11:11:11 +0700</pubDate>
+      <guid>https://m6l1.github.io/tags/c/</guid>
       <description></description>
     </item>
     <item>

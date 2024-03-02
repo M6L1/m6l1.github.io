@@ -6,8 +6,15 @@
     <description>Recent content in Technotes on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Feb 2023 11:11:11 +0700</lastBuildDate>
+    <lastBuildDate>Thu, 02 Mar 2023 20:02:15 +0700</lastBuildDate>
     <atom:link href="https://m6l1.github.io/categories/technotes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Useful tips of slice tricks in golang</title>
+      <link>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</link>
+      <pubDate>Thu, 02 Mar 2023 20:02:15 +0700</pubDate>
+      <guid>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</guid>
+      <description>Some slice tricks of golang</description>
+    </item>
     <item>
       <title>Using C in golang</title>
       <link>https://m6l1.github.io/technotes/using-c-in-golang/</link>

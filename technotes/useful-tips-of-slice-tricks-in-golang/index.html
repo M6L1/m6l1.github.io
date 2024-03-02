@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Useful tips of slice tricks in golang | NEXUS-Link 
+</title>
+<meta name="description" content="Some slice tricks of golang" />
+<meta property="og:title" content="Useful tips of slice tricks in golang | NEXUS-Link" />
+<meta name="twitter:title" content="Useful tips of slice tricks in golang | NEXUS-Link" />
+<meta itemprop="name" content="Useful tips of slice tricks in golang | NEXUS-Link" />
+<meta name="application-name" content="Useful tips of slice tricks in golang | NEXUS-Link" />
+<meta property="og:description"
+      content="Some slice tricks of golang" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/golang_gopher.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/golang_gopher.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Useful tips of slice tricks in golang
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h3 id="about-slices">About Slices</h3>
+<p>In Go, arrays with a fixed length are called arrays, while those without a fixed length are called slices. Operations on slices typically include <strong>creation</strong>, <strong>reading</strong>, <strong>updating</strong>, <strong>appending</strong>, and <strong>deletion</strong>. Creation can utilize <strong>make</strong> and <strong>new</strong>; <strong>reading</strong> and <strong>updating</strong> are similar to other programming languages, where the some_array[index] method can be used; <strong>appending</strong> involves either adding elements at the end or inserting elements at specific positions. For <strong>appending</strong>, Go&rsquo;s standard library has an append method available, but there are no corresponding functions for <strong>insertion</strong> and <strong>deletion</strong>; the closest, the delete method, can only be used with the map type (Go&rsquo;s map type is like dictionaries or hashes in other languages). Hence, here are some techniques for operating slices in Go.</p>
+<h3 id="making-of-slice">Making of slice</h3>
+<p>At the beginning, it was mentioned that slices can be created using <strong>make</strong> or <strong>new</strong>. Here are the corresponding syntax examples:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> make([]<span style="color:#a6e22e">T</span>, <span style="color:#ae81ff">5</span>)      <span style="color:#75715e">// Declare a slice a with a length and capacity of 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> make([]<span style="color:#a6e22e">T</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>)  <span style="color:#75715e">// Declare a slice b with a length of 5 and a capacity of 10
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> new([]<span style="color:#a6e22e">T</span>)          <span style="color:#75715e">// Declare a pointer c to a slice
+</span></span></span></code></pre></div><p>T represents a type (int, string, myStruct…). If <strong>appending</strong> elements to a slice exceeds its initially specified length or capacity, Go will automatically reallocate a larger memory block to this slice and copy the original content into the new memory block, a process similar to C&rsquo;s realloc, only Go does it for you.</p>
+<h3 id="getting-the-length-and-capacity-of-a-slice">Getting the length and capacity of a slice</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">len</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">a</span>)  <span style="color:#75715e">// len = 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cap</span> <span style="color:#f92672">:=</span> cap(<span style="color:#a6e22e">a</span>)  <span style="color:#75715e">// cap = 10
+</span></span></span></code></pre></div><h3 id="prototype-of-the-append-method">Prototype of the append method</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> append(<span style="color:#a6e22e">slice</span> []<span style="color:#a6e22e">Type</span>, <span style="color:#a6e22e">elems</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">Type</span>) []<span style="color:#a6e22e">Type</span>
+</span></span></code></pre></div><p>Type represents a type (int, string, myStruct…). This function accepts two sets of parameters: the first set is the slice to which elements will be added, and the second set is <a href="http://en.wikipedia.org/wiki/Variadic">variadic parameters</a>.</p>
+<h3 id="adding-an-element-b-to-slice-a">Adding an element b to slice a</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)  <span style="color:#75715e">// Equivalent to pushing an element b into slice a
+</span></span></span></code></pre></div><h3 id="add-three-elements-b-c-d-to-slice-a">Add three elements b, c, d to slice a</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">d</span>)
+</span></span></code></pre></div><h3 id="adding-a-slice-b-to-slice-a">Adding a slice b to slice a</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span><span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Here, the <strong>&hellip;</strong> is not an ellipsis but part of the syntax. Note that the slice b cannot take an array because, in Go, an array&rsquo;s length is also a part of its type. Therefore, an int array of length 3 and an int array of length 5 are different types, not to mention a variable-length slice. The b&hellip; syntax only accepts slices! So, what if a programmer wants to add an array to the end of a slice? Just convert the array to a slice first:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Create an array of length 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">array</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Create slice b from array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// For conversion between array and slice, refer to &#34;Array and Slice Conversion&#34; in this article
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[:]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Append slice b to slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span><span style="color:#f92672">...</span>)
+</span></span></code></pre></div><h3 id="prototype-of-the-copy-method">Prototype of the copy method</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#66d9ef">func</span> copy(<span style="color:#a6e22e">dst</span>, <span style="color:#a6e22e">src</span> []<span style="color:#a6e22e">Type</span>) <span style="color:#66d9ef">int</span>
+</span></span></code></pre></div><p>Type represents a type (int, string, myStruct…). This function takes two parameters: the first is the destination of the copy, and the second is the source of the copy, simply put, it copies from the latter to the former. The return value is the number of elements copied.
+Copy slice a to slice b</p>
+<h3 id="copying-slice-a-to-slice-b">Copying slice a to slice b</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Create a slice b with the same length as slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> = make([]<span style="color:#a6e22e">T</span>, len(<span style="color:#a6e22e">a</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Copy slice a to slice b
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	copy(<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>T represents a type, please substitute it with int, string, myStruct… Think about it, isn&rsquo;t copying just like adding everything into an empty collection? So, you could also do this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> = append([]<span style="color:#a6e22e">T</span>(<span style="color:#66d9ef">nil</span>), <span style="color:#a6e22e">a</span><span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>This method showcases a little trick: <strong>[]T(nil)</strong> is a type []T, a slice of length 0, and <strong>append</strong> will add all elements of slice a into this empty slice <strong>[]T(nil)</strong>, then return the reference to slice b. What if the sizes of the copies differ? Let&rsquo;s discuss two scenarios:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span> }  <span style="color:#75715e">// a is a slice of length 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span> }     <span style="color:#75715e">// b is a slice of length 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> copy(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)      <span style="color:#75715e">// Copy b into a, and store the number of copied elements into num
+</span></span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> = [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">num</span> = <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>Let&rsquo;s reverse the order of copying and see the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span> }  <span style="color:#75715e">// a is a slice of length 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span> }     <span style="color:#75715e">// b is a slice of length 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> copy(<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">a</span>)      <span style="color:#75715e">// Copy a into b, and store the number of copied elements into num
+</span></span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> = [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">num</span> = <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>From here, we can see that in Go, copying two collections of different sizes does not cause any issues; copying always goes by the smaller collection&rsquo;s length.</p>
+<h3 id="extracting-a-part-of-a-slice-into-a-new-slice">Extracting a part of a slice into a new slice</h3>
+<p>Suppose slice a contains 6 elements as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span> }
+</span></span></code></pre></div><p>To extract [2, 3, 4] from slice a, you can do this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>])
+</span></span></code></pre></div><p>The syntax <strong>[i:j]</strong> means i &lt;= {x} &lt; j, where i and j are index values within the slice, and {x} represents the set of elements that meet the index condition. So, <strong>[2:5]</strong> refers to the elements a[2], a[3], a[4]. To extract [0, 1, 4, 5] from slice a, you can do this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">4</span>:]<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>The syntax <strong>[i:]</strong> means <strong>i &lt;= {x}</strong>, where {x} includes all elements from index i to the end of the collection.</p>
+<p>The syntax <strong>[:j]</strong> means <strong>{x} &lt; j</strong>, where {x} includes all elements from the start of the collection up to the element before index j.</p>
+<p>To extract [1, 3, 5] from slice a, you can do this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">0</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">5</span>]) <span style="color:#75715e">// a[:0] is equivalent to an empty slice
+</span></span></span></code></pre></div><p>If you only want 3 specific elements from slice a, the concept is similar to adding these 3 specific elements into an empty slice, hence the use of <strong>a[:0]</strong> trick here. Because the append function&rsquo;s first set of parameters is a slice, and we want the first set of parameters to be an empty slice without declaring a new empty slice variable, we use the previously mentioned <strong>[:j]</strong> syntax to take elements from the start of the collection up to the element before index j. Since j here is 0, meaning no elements are taken, it results in an empty collection.</p>
+<h3 id="deleting-specific-elements-from-a-slice">Deleting specific elements from a slice</h3>
+<p>Understanding the <strong>[i:j]</strong> syntax and its application, you can further use this method to delete specific elements from a slice.</p>
+<p>Suppose slice a contains 6 elements as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span> }
+</span></span></code></pre></div><p>To remove element 3 from slice a, you can do this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">3</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">4</span>:]<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>To express it as a template without affecting the order, to remove the ith element from slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>:]<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Expanding this template expression to remove all elements included in <strong>i &lt;= {x} &lt; j</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>:]<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Of course, if you&rsquo;ve understood all the operations so far, you can also use this clever method to delete element 3:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">3</span><span style="color:#f92672">+</span>copy(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>:], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">4</span>:])]
+</span></span></code></pre></div><p>This expression is equivalent to the following code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> copy(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>:], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">4</span>:])  <span style="color:#75715e">// num = 2, a = [ 0, 1, 2, 4, 5, 5 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">3</span><span style="color:#f92672">+</span><span style="color:#a6e22e">num</span>]
+</span></span></code></pre></div><p>The expression copy(a[3:], a[4:]) can be further broken down into a[3:] and a[4:]. a[3:] represents [3, 4, 5] with 3 elements, while a[4:] represents [4, 5] with 2 elements. Following the principle mentioned in the <a href="#copying-slice-a-to-slice-b">copy section</a> earlier, copying is done based on the smaller collection&rsquo;s length, so this expression&rsquo;s operation copied 2 elements, resulting in 2, and hence the original expression can be further simplified to:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">3</span><span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>]
+</span></span></code></pre></div><p>Performing the operation again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">5</span>]
+</span></span></code></pre></div><p>As mentioned before, <strong>[:j]</strong> means from the start of the collection up to the **(j-1)**th element, so a[:5] represents [0, 1, 2, 4, 5], successfully removing element 3. If the slice is just a <strong>collection</strong> to you and the order of elements inside doesn&rsquo;t matter, there&rsquo;s another way to remove element 3. First, let&rsquo;s explain the parallel assignment method borrowed from interpreted languages in Go:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>This expression is equivalent to in C language:</p>
+<pre tabindex="0"><code>	a = 3;
+	b = 5;
+</code></pre><p>Parallel assignment is not just <a href="http://en.wikipedia.org/wiki/Syntactic_sugar">syntactic sugar</a> for simplifying assignment operations. In C language, to swap two values, you need to declare another temporary variable to assist, for example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// a = 3, b = 5 -&gt; a = 5, b = 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">tmp</span> = <span style="color:#a6e22e">a</span>;  <span style="color:#75715e">// tmp = 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">b</span>;    <span style="color:#75715e">// a = 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">tmp</span>;  <span style="color:#75715e">// b = 3
+</span></span></span></code></pre></div><p>But parallel assignment can directly swap:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>  <span style="color:#75715e">// a = 3, b = 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">a</span>  <span style="color:#75715e">// a = 5, b = 3
+</span></span></span></code></pre></div><p>Returning to the topic of removing element 3, here&rsquo;s another clever method:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>], <span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#a6e22e">a</span>[:len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span></code></pre></div><p>The effect of this line of expression is equivalent to:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// a = [ 0, 1, 2, 3, 4, 5 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>] = <span style="color:#a6e22e">a</span>[len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]  <span style="color:#75715e">// a[3] = 5, a = [ 0, 1, 2, 5, 4, 5 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[:len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]    <span style="color:#75715e">// a = [ 0, 1, 2, 5, 4 ], Effectively popping an element out of slice a
+</span></span></span></code></pre></div><p>The first expression is intuitive; len(a) represents the length of slice a, and a[len(a)-1] represents the last element of the slice. This expression means to store the last element 5 of slice a into a[3]. The second expression is also straightforward because <strong>[:j]</strong> means from the start of the collection up to the **(j-1)**th element, so this expression means to take up to the second-to-last element from the start of slice a, in other words, discarding the last element of slice a.</p>
+<p>Analyzing this clever method, it&rsquo;s just 2 steps:</p>
+<ol>
+<li>Replace the position value of the element to be deleted with the last element of the slice.</li>
+<li>Remove the duplicated last element.</li>
+</ol>
+<p>When performing the [i:j] operation on a slice, discarding either the first or the last element only requires one index value, which is more convenient. Therefore, the above method can be varied by replacing the position value of the element to be deleted with the first element and then discarding the duplicated first element:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// a = [ 0, 1, 2, 3, 4, 5 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>]  <span style="color:#75715e">// a[3] = 0, a = [ 0, 1, 2, 0, 4, 5 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>:]    <span style="color:#75715e">// a = [ 1, 2, 0, 4, 5 ]
+</span></span></span></code></pre></div><p>Expressed as a template without maintaining order, to remove the ith element from slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>:]
+</span></span></code></pre></div><p>Doesn&rsquo;t it look simpler now?</p>
+<h3 id="garbage-collection-and-potential-memory-leak-issues">Garbage Collection and Potential Memory Leak Issues</h3>
+<p>Go has a garbage collection mechanism, so it automatically releases memory space that is no longer needed. However, since slices are reference types, if the memory address referenced by slice elements is still accessible, Go will consider this memory still needed and will not actively release it. For one-off, simple programs, this issue need not be considered, as Go will release the memory before exiting upon completion. However, for large programs, especially server-like programs that run uninterrupted, avoiding potential memory leaks becomes necessary.</p>
+<p>Below are enhanced versions of some slice operations mentioned in the previous sections, all centered around setting the address of slice elements no longer needed to the <a href="https://golang.org/ref/spec#The_zero_value">zero value</a>: Removing elements from slice a where i &lt;= {x} &lt; j:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	copy(<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>:], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>:])
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#a6e22e">j</span><span style="color:#f92672">+</span><span style="color:#a6e22e">i</span>, len(<span style="color:#a6e22e">a</span>); <span style="color:#a6e22e">k</span> &lt; <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">k</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>	    <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">k</span>] = <span style="color:#66d9ef">nil</span>  <span style="color:#75715e">// Or set to the zero value of slice a&#39;s type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[:len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#a6e22e">j</span><span style="color:#f92672">+</span><span style="color:#a6e22e">i</span>]
+</span></span></code></pre></div><p>While maintaining order, delete the element at position i from slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#66d9ef">nil</span>  <span style="color:#75715e">// Or set to the zero value of slice a&#39;s type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>:]<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Without maintaining order, delete the element at position i from slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">a</span>[:len(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]  <span style="color:#75715e">// Delete the last element
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>], <span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>], <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>:]                       <span style="color:#75715e">// Delete the last element
+</span></span></span></code></pre></div><p>In Go, all variables that are not actively assigned are initialized to the <a href="https://golang.org/ref/spec#The_zero_value">zero value</a> of their type upon creation. Here is a simple reference table:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Zero Value</th>
+<th>Type</th>
+<th>Zero Value</th>
+<th>Type</th>
+<th>Zero Value</th>
+<th>Type</th>
+<th>Zero Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>booleans</td>
+<td>false</td>
+<td>integers</td>
+<td>0</td>
+<td>floats</td>
+<td>0.0</td>
+<td>strings</td>
+<td>&quot;&quot;</td>
+</tr>
+<tr>
+<td>pointers</td>
+<td>nil</td>
+<td>functions</td>
+<td>nil</td>
+<td>interfaces</td>
+<td>nil</td>
+<td>slices</td>
+<td>nil</td>
+</tr>
+<tr>
+<td>slices</td>
+<td>nil</td>
+<td>channels</td>
+<td>nil</td>
+<td>maps</td>
+<td>nil</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>In Go, <strong>nil</strong> is equivalent to NULL in C. If the entire slice is no longer needed, the following method can be used to clear the entire slice&rsquo;s reference, and Go will recycle the memory that is no longer needed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Declare a slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a, len(a), cap(a) =&#34;</span>, <span style="color:#a6e22e">a</span>, len(<span style="color:#a6e22e">a</span>), cap(<span style="color:#a6e22e">a</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Discard the entire slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a, len(a), cap(a) =&#34;</span>, <span style="color:#a6e22e">a</span>, len(<span style="color:#a6e22e">a</span>), cap(<span style="color:#a6e22e">a</span>))
+</span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>, len(<span style="color:#a6e22e">a</span>), cap(<span style="color:#a6e22e">a</span>) = [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">5</span>] <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>, len(<span style="color:#a6e22e">a</span>), cap(<span style="color:#a6e22e">a</span>) = [] <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>  <span style="color:#75715e">// The slice has been removed
+</span></span></span></code></pre></div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="manually-expanding-the-length-of-a-slice-adding-to-the-end">Manually expanding the length of a slice (adding to the end)</h3>
+<p>First, create a slice a using <strong>make</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>)
+</span></span></code></pre></div><p>The content, length, and capacity of this slice a are:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#960050;background-color:#1e0010">＝</span> [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span> ]
+</span></span><span style="display:flex;"><span>	len(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>	cap(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>Then, expand the length of this slice a by 3, adding to the end of slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>)<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Breaking it down internally, make([]int, 3) means creating a slice of length 3. Using <a href="#adding-a-slice-b-to-slice-a">the syntax mentioned earlier</a>, this newly created slice is added to slice a. Initially, the length and capacity of slice a are both 5, but after adding a slice of length 3 to slice a, the result becomes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#960050;background-color:#1e0010">＝</span> [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span> ]
+</span></span><span style="display:flex;"><span>	len(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>	cap(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">10</span>
+</span></span></code></pre></div><p>When Go detects that the length expansion exceeds the capacity, it automatically doubles the original capacity.</p>
+<h3 id="manually-expanding-the-length-of-a-slice-inserting-in-the-middle">Manually expanding the length of a slice (inserting in the middle)</h3>
+<p>Similarly, the current content, length, and capacity of slice a are listed as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#960050;background-color:#1e0010">＝</span> [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span> ]
+</span></span><span style="display:flex;"><span>	len(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>	cap(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>Expand the length of this slice a by 3, inserting at position 2 in slice a</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], append(make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>), <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>This expression and the following code are equivalent:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>)      <span style="color:#75715e">// b = [ 0, 0, 0 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> = append(<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)  <span style="color:#75715e">// b = [ 0, 0, 0, 2, 3, 4 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], <span style="color:#a6e22e">b</span><span style="color:#f92672">...</span>)  <span style="color:#75715e">// a = [ 0, 1, 0, 0, 0, 2, 3, 4 ]
+</span></span></span></code></pre></div><p>These three lines represent:</p>
+<ol>
+<li>Create a slice b with a length of 3.</li>
+<li>Add all elements of slice a from position 2 onwards to the end of the newly created slice b.</li>
+<li>Add all elements of slice b to the collection of elements in slice a before position 1.
+The final result is:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span> ]
+</span></span><span style="display:flex;"><span>	len(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>	cap(<span style="color:#a6e22e">a</span>) = <span style="color:#ae81ff">10</span>
+</span></span></code></pre></div><p>Expressed as a template, at the ith position of slice a, insert a slice of length j:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#a6e22e">i</span>], append(make([]<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">j</span>), <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>:]<span style="color:#f92672">...</span>)<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><h3 id="inserting-slice-b-into-slice-a">Inserting slice b into slice a</h3>
+<p>Suppose slice a is an empty slice of length 5, and slice b is a non-empty slice of length 3:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>)    	<span style="color:#75715e">// a = [ 0, 1, 2, 3, 4 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{ <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span> }  	<span style="color:#75715e">// b = [ 7, 8, 9 ]
+</span></span></span></code></pre></div><p>Insert slice b at position 2:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], append(<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Breaking this expression down into equivalent code for analysis:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> = append(<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)  <span style="color:#75715e">// b = [ 7, 8, 9, 2, 3, 4 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], <span style="color:#a6e22e">b</span><span style="color:#f92672">...</span>)  <span style="color:#75715e">// a = [ 0, 1, 7, 8, 9, 2, 3, 4 ]
+</span></span></span></code></pre></div><p>Similarly, if slice b contains only one element, the same operation is inserting one element into slice a.</p>
+<p>Inserting 5 at position 2 of slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], append([]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>}, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// a = [ 0, 1, 5, 2, 3, 4 ]
+</span></span></span></code></pre></div><h3 id="the-hidden-memory-leak-issue-in-nested-append">The hidden memory leak issue in nested append</h3>
+<p>Before this section, it might be helpful to review the <a href="#garbage-collection-and-potential-memory-leak-issues">garbage collection</a> subsection mentioned earlier. Taking the nested append of inserting 5 at position 2 of slice a as an example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], append([]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>}, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>Breaking down this expression into equivalent code for analysis:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> append([]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>}, <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:]<span style="color:#f92672">...</span>)  <span style="color:#75715e">// b = [ 5, 2, 3, 4 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>[:<span style="color:#ae81ff">2</span>], <span style="color:#a6e22e">b</span><span style="color:#f92672">...</span>)          <span style="color:#75715e">// a = [ 0, 1, 5, 2, 3, 4 ]
+</span></span></span></code></pre></div><p>Here, there are actually two slices involved: an inner slice b and an outer slice a. The final result resides in slice a, while the intermediate, temporary value slice b is no longer needed. However, because it is still accessible, Go considers it as not releasable, especially since slice b is implicitly declared without a variable name, leaving us no opportunity to set it to nil! Here is a more recommended implementation for inserting 5 at position 2 of slice a:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#ae81ff">0</span>)    <span style="color:#75715e">// a = [ 0, 1, 2, 3, 4, 0 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	copy(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">3</span>:], <span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>:])  <span style="color:#75715e">// a = [ 0, 1, 2, 2, 3, 4 ]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">2</span>] = <span style="color:#ae81ff">5</span>            <span style="color:#75715e">// a = [ 0, 1, 5, 2, 3, 4 ]
+</span></span></span></code></pre></div><p>These three lines represent:</p>
+<ol>
+<li>Increase the length of slice a by one.</li>
+<li>Through the effect of copying, create a duplicate slot at the position where the element is to be inserted.</li>
+<li>Set the value of the duplicate element at position 2 to the inserted value 5.
+Expressed as a template expression, to insert element x at the ith position of slice a:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>	copy(<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>:], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>:])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">x</span>
+</span></span></code></pre></div><h3 id="conversion-between-arrays-and-slices">Conversion between arrays and slices</h3>
+<p>First, let&rsquo;s discuss how to convert a slice into an array that holds all elements of the slice to be converted.</p>
+<p>Declare a slice of length 10 and capacity 10, named slice:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Declare a slice
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span></code></pre></div><p>Then declare an array with 10 int type elements named array. As mentioned before, arrays in Go have a fixed size, so the syntax is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Declare a fixed-length array of 10
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">array</span> = [<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>}
+</span></span></code></pre></div><p>Or, you can use the <strong>[&hellip;]</strong> syntactic sugar to let the compiler determine the size of the array at compile time:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">array</span> = [<span style="color:#f92672">...</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>}
+</span></span></code></pre></div><p>Both of the above declaration methods result in an array of the same type, <strong>[10]int</strong>. It&rsquo;s emphasized again that in Go, the size of an array is part of its type. The most intuitive way is to assign values to each element of the array:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Assign values to each element of the array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">array</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">array</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">slice</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Since the variable array must explicitly specify its size when declared, the result of <strong>len(array)</strong> is considered constant. Another way takes a bit of a detour, as mentioned before, the conversion is about making the array contain all elements of the slice to be converted. Isn&rsquo;t this the same concept as the copy() function mentioned in the <a href="#prototype-of-the-copy-method">previous section</a>? But the prototype of this copy() function only accepts two slices, and the variable array is of array type, so here&rsquo;s how to convert an array into a slice:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[:]
+</span></span></code></pre></div><p>This can be done with the <strong>:</strong> operator. The syntax <strong>[i:j]</strong> extracts all elements that meet the condition <strong>i &lt;= {x} &lt; j</strong>, and the <strong>[:]</strong> syntax used here means to take all elements! Think about it: <strong>extracting all elements from an array and then storing them in a container that has not explicitly specified a size, isn&rsquo;t that a slice?</strong> After learning how to convert an array into a slice, you can then use the following method to convert a slice into an array:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#75715e">// Copy all elements of the slice into the array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	copy(<span style="color:#a6e22e">array</span>[:], <span style="color:#a6e22e">slice</span>[:])
+</span></span></code></pre></div><h3 id="extented-reading">Extented Reading</h3>
+<ul>
+<li><a href="http://golang.org/pkg/builtin/#copy">golang.org #func copy</a></li>
+<li><a href="http://golang.org/pkg/builtin/#append">golang.org #func append</a></li>
+<li><a href="http://blog.golang.org/slices">The mechanics of &lsquo;append&rsquo;</a></li>
+<li><a href="https://github.com/golang/go/wiki/SliceTricks">SlickTricks</a></li>
+</ul>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>
