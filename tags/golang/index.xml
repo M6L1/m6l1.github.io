@@ -2,39 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Golang on NEXUS-Link</title>
-    <link>https://m6l1.github.io/tags/golang/</link>
+    <link>http://172.19.188.148/tags/golang/</link>
     <description>Recent content in Golang on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Mar 2023 20:02:15 +0700</lastBuildDate>
-    <atom:link href="https://m6l1.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Useful tips of slice tricks in golang</title>
-      <link>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</link>
-      <pubDate>Thu, 02 Mar 2023 20:02:15 +0700</pubDate>
-      <guid>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</guid>
-      <description>Some slice tricks of golang</description>
-    </item>
+    <lastBuildDate>Wed, 28 Feb 2024 11:11:11 +0700</lastBuildDate>
+    <atom:link href="http://172.19.188.148/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using C in golang</title>
-      <link>https://m6l1.github.io/technotes/using-c-in-golang/</link>
-      <pubDate>Tue, 28 Feb 2023 11:11:11 +0700</pubDate>
-      <guid>https://m6l1.github.io/technotes/using-c-in-golang/</guid>
+      <link>http://172.19.188.148/technotes/using-c-in-golang/</link>
+      <pubDate>Wed, 28 Feb 2024 11:11:11 +0700</pubDate>
+      <guid>http://172.19.188.148/technotes/using-c-in-golang/</guid>
       <description>How to use C in golang?</description>
     </item>
     <item>
-      <title>API</title>
-      <link>https://m6l1.github.io/recruitment/api/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/api/</guid>
-      <description>Field Application Engineer</description>
+      <title>Comprehensive Guide to REST APIs and WebSocket</title>
+      <link>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</link>
+      <pubDate>Thu, 22 Feb 2024 20:02:15 +0700</pubDate>
+      <guid>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</guid>
+      <description>Dig into REST APIs and WebSocket</description>
     </item>
     <item>
-      <title>Comprehensive Guide to REST APIs and WebSocket</title>
-      <link>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</link>
-      <pubDate>Wed, 22 Feb 2023 20:02:15 +0700</pubDate>
-      <guid>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</guid>
-      <description>Dig into REST APIs and WebSocket</description>
+      <title>API</title>
+      <link>http://172.19.188.148/recruitment/api/</link>
+      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
+      <guid>http://172.19.188.148/recruitment/api/</guid>
+      <description>Field Application Engineer</description>
     </item>
   </channel>
 </rss>

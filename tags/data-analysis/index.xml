@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Data Analysis on NEXUS-Link</title>
-    <link>https://m6l1.github.io/tags/data-analysis/</link>
+    <link>http://172.19.188.148/tags/data-analysis/</link>
     <description>Recent content in Data Analysis on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 23 Feb 2023 09:09:36 +0700</lastBuildDate>
-    <atom:link href="https://m6l1.github.io/tags/data-analysis/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://172.19.188.148/tags/data-analysis/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Data Analysis</title>
-      <link>https://m6l1.github.io/recruitment/data-analysis-dae/</link>
+      <link>http://172.19.188.148/recruitment/data-analysis-dae/</link>
       <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/data-analysis-dae/</guid>
+      <guid>http://172.19.188.148/recruitment/data-analysis-dae/</guid>
       <description>Data Analysis Engineer</description>
     </item>
     <item>
       <title>Data Analysis Assistant</title>
-      <link>https://m6l1.github.io/recruitment/data-analysis-assistant/</link>
+      <link>http://172.19.188.148/recruitment/data-analysis-assistant/</link>
       <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/data-analysis-assistant/</guid>
+      <guid>http://172.19.188.148/recruitment/data-analysis-assistant/</guid>
       <description>Assistant for Data Analysis</description>
     </item>
   </channel>

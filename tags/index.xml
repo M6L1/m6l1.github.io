@@ -2,122 +2,122 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on NEXUS-Link</title>
-    <link>https://m6l1.github.io/tags/</link>
+    <link>http://172.19.188.148/tags/</link>
     <description>Recent content in Tags on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Mar 2023 20:02:15 +0700</lastBuildDate>
-    <atom:link href="https://m6l1.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 28 Feb 2024 11:11:11 +0700</lastBuildDate>
+    <atom:link href="http://172.19.188.148/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C</title>
+      <link>http://172.19.188.148/tags/c/</link>
+      <pubDate>Wed, 28 Feb 2024 11:11:11 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/c/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Golang</title>
-      <link>https://m6l1.github.io/tags/golang/</link>
-      <pubDate>Thu, 02 Mar 2023 20:02:15 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/golang/</guid>
+      <link>http://172.19.188.148/tags/golang/</link>
+      <pubDate>Wed, 28 Feb 2024 11:11:11 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/golang/</guid>
       <description></description>
     </item>
     <item>
       <title>Programming</title>
-      <link>https://m6l1.github.io/tags/programming/</link>
-      <pubDate>Thu, 02 Mar 2023 20:02:15 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/programming/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>C</title>
-      <link>https://m6l1.github.io/tags/c/</link>
-      <pubDate>Tue, 28 Feb 2023 11:11:11 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/c/</guid>
+      <link>http://172.19.188.148/tags/programming/</link>
+      <pubDate>Wed, 28 Feb 2024 11:11:11 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/programming/</guid>
       <description></description>
     </item>
     <item>
       <title>API</title>
-      <link>https://m6l1.github.io/tags/api/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/api/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Backend</title>
-      <link>https://m6l1.github.io/tags/backend/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/backend/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Engineer</title>
-      <link>https://m6l1.github.io/tags/engineer/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/engineer/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Database</title>
-      <link>https://m6l1.github.io/tags/database/</link>
-      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/database/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Mongodb</title>
-      <link>https://m6l1.github.io/tags/mongodb/</link>
-      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/mongodb/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Mysql</title>
-      <link>https://m6l1.github.io/tags/mysql/</link>
-      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/mysql/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Assistant</title>
-      <link>https://m6l1.github.io/tags/assistant/</link>
-      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/assistant/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Data Analysis</title>
-      <link>https://m6l1.github.io/tags/data-analysis/</link>
-      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/data-analysis/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Python</title>
-      <link>https://m6l1.github.io/tags/python/</link>
-      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/tags/python/</guid>
+      <link>http://172.19.188.148/tags/api/</link>
+      <pubDate>Thu, 22 Feb 2024 20:02:15 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/api/</guid>
       <description></description>
     </item>
     <item>
       <title>CNCF</title>
-      <link>https://m6l1.github.io/tags/cncf/</link>
-      <pubDate>Sun, 18 Dec 2022 11:10:36 +0800</pubDate>
-      <guid>https://m6l1.github.io/tags/cncf/</guid>
+      <link>http://172.19.188.148/tags/cncf/</link>
+      <pubDate>Thu, 18 Jan 2024 11:10:36 +0800</pubDate>
+      <guid>http://172.19.188.148/tags/cncf/</guid>
       <description></description>
     </item>
     <item>
       <title>Container</title>
-      <link>https://m6l1.github.io/tags/container/</link>
-      <pubDate>Sun, 18 Dec 2022 11:10:36 +0800</pubDate>
-      <guid>https://m6l1.github.io/tags/container/</guid>
+      <link>http://172.19.188.148/tags/container/</link>
+      <pubDate>Thu, 18 Jan 2024 11:10:36 +0800</pubDate>
+      <guid>http://172.19.188.148/tags/container/</guid>
       <description></description>
     </item>
     <item>
       <title>K8s</title>
-      <link>https://m6l1.github.io/tags/k8s/</link>
-      <pubDate>Sun, 18 Dec 2022 11:10:36 +0800</pubDate>
-      <guid>https://m6l1.github.io/tags/k8s/</guid>
+      <link>http://172.19.188.148/tags/k8s/</link>
+      <pubDate>Thu, 18 Jan 2024 11:10:36 +0800</pubDate>
+      <guid>http://172.19.188.148/tags/k8s/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Backend</title>
+      <link>http://172.19.188.148/tags/backend/</link>
+      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/backend/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Engineer</title>
+      <link>http://172.19.188.148/tags/engineer/</link>
+      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/engineer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Database</title>
+      <link>http://172.19.188.148/tags/database/</link>
+      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/database/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mongodb</title>
+      <link>http://172.19.188.148/tags/mongodb/</link>
+      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/mongodb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mysql</title>
+      <link>http://172.19.188.148/tags/mysql/</link>
+      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/mysql/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Assistant</title>
+      <link>http://172.19.188.148/tags/assistant/</link>
+      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/assistant/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Data Analysis</title>
+      <link>http://172.19.188.148/tags/data-analysis/</link>
+      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/data-analysis/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python</title>
+      <link>http://172.19.188.148/tags/python/</link>
+      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
+      <guid>http://172.19.188.148/tags/python/</guid>
       <description></description>
     </item>
     <item>
       <title>Nexus-Link</title>
-      <link>https://m6l1.github.io/tags/nexus-link/</link>
+      <link>http://172.19.188.148/tags/nexus-link/</link>
       <pubDate>Sat, 18 Dec 2021 11:10:36 +0800</pubDate>
-      <guid>https://m6l1.github.io/tags/nexus-link/</guid>
+      <guid>http://172.19.188.148/tags/nexus-link/</guid>
       <description></description>
     </item>
   </channel>
