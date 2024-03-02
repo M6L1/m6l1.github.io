@@ -2,103 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://172.19.188.148/</loc>
-    <lastmod>2024-03-23T20:02:15+07:00</lastmod>
+    <loc>https://m6l1.github.io/</loc>
+    <lastmod>2024-03-23T09:09:22+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/technotes/</loc>
-    <lastmod>2024-03-23T20:02:15+07:00</lastmod>
+    <loc>https://m6l1.github.io/technotes/</loc>
+    <lastmod>2024-03-23T09:09:22+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/c/</loc>
+    <loc>https://m6l1.github.io/categories/</loc>
+    <lastmod>2024-03-02T11:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/golang/</loc>
+    <lastmod>2024-03-02T11:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/programming/</loc>
+    <lastmod>2024-03-02T11:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/</loc>
+    <lastmod>2024-03-02T11:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/categories/technotes/</loc>
+    <lastmod>2024-03-02T11:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</loc>
+    <lastmod>2024-03-02T11:02:15+07:00</lastmod>
+  </url><url>
+    <loc>https://m6l1.github.io/tags/c/</loc>
     <lastmod>2024-02-28T11:11:11+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/categories/</loc>
+    <loc>https://m6l1.github.io/technotes/using-c-in-golang/</loc>
     <lastmod>2024-02-28T11:11:11+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/golang/</loc>
-    <lastmod>2024-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>http://172.19.188.148/tags/programming/</loc>
-    <lastmod>2024-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>http://172.19.188.148/tags/</loc>
-    <lastmod>2024-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>http://172.19.188.148/categories/technotes/</loc>
-    <lastmod>2024-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>http://172.19.188.148/technotes/using-c-in-golang/</loc>
-    <lastmod>2024-02-28T11:11:11+07:00</lastmod>
-  </url><url>
-    <loc>http://172.19.188.148/tags/api/</loc>
+    <loc>https://m6l1.github.io/tags/api/</loc>
     <lastmod>2024-02-22T20:02:15+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</loc>
+    <loc>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</loc>
     <lastmod>2024-02-22T20:02:15+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/technotes/c-pitfalls/</loc>
+    <loc>https://m6l1.github.io/technotes/c-pitfalls/</loc>
     <lastmod>2024-02-21T20:02:15+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/cncf/</loc>
-    <lastmod>2024-01-18T11:10:36+08:00</lastmod>
+    <loc>https://m6l1.github.io/tags/cncf/</loc>
+    <lastmod>2023-12-18T11:10:36+08:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/container/</loc>
-    <lastmod>2024-01-18T11:10:36+08:00</lastmod>
+    <loc>https://m6l1.github.io/tags/container/</loc>
+    <lastmod>2023-12-18T11:10:36+08:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/technotes/introduction-to-kubernetes/</loc>
-    <lastmod>2024-01-18T11:10:36+08:00</lastmod>
+    <loc>https://m6l1.github.io/technotes/introduction-to-kubernetes/</loc>
+    <lastmod>2023-12-18T11:10:36+08:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/k8s/</loc>
-    <lastmod>2024-01-18T11:10:36+08:00</lastmod>
+    <loc>https://m6l1.github.io/tags/k8s/</loc>
+    <lastmod>2023-12-18T11:10:36+08:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/recruitment/api/</loc>
+    <loc>https://m6l1.github.io/recruitment/api/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/backend/</loc>
+    <loc>https://m6l1.github.io/tags/backend/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/engineer/</loc>
+    <loc>https://m6l1.github.io/tags/engineer/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/categories/recruitment/</loc>
+    <loc>https://m6l1.github.io/categories/recruitment/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/recruitment/</loc>
+    <loc>https://m6l1.github.io/recruitment/</loc>
     <lastmod>2023-02-23T11:11:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/database/</loc>
+    <loc>https://m6l1.github.io/tags/database/</loc>
     <lastmod>2023-02-23T10:10:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/recruitment/db-admin/</loc>
+    <loc>https://m6l1.github.io/recruitment/db-admin/</loc>
     <lastmod>2023-02-23T10:10:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/mongodb/</loc>
+    <loc>https://m6l1.github.io/tags/mongodb/</loc>
     <lastmod>2023-02-23T10:10:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/mysql/</loc>
+    <loc>https://m6l1.github.io/tags/mysql/</loc>
     <lastmod>2023-02-23T10:10:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/assistant/</loc>
+    <loc>https://m6l1.github.io/tags/assistant/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/data-analysis/</loc>
+    <loc>https://m6l1.github.io/tags/data-analysis/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/recruitment/data-analysis-dae/</loc>
+    <loc>https://m6l1.github.io/recruitment/data-analysis-dae/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/recruitment/data-analysis-assistant/</loc>
+    <loc>https://m6l1.github.io/recruitment/data-analysis-assistant/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/python/</loc>
+    <loc>https://m6l1.github.io/tags/python/</loc>
     <lastmod>2023-02-23T09:09:36+07:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/about/</loc>
+    <loc>https://m6l1.github.io/about/</loc>
     <lastmod>2021-12-18T11:10:36+08:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/contact/</loc>
+    <loc>https://m6l1.github.io/contact/</loc>
     <lastmod>2021-12-18T03:10:36+00:00</lastmod>
   </url><url>
-    <loc>http://172.19.188.148/tags/nexus-link/</loc>
+    <loc>https://m6l1.github.io/tags/nexus-link/</loc>
     <lastmod>2021-12-18T11:10:36+08:00</lastmod>
   </url>
 </urlset>

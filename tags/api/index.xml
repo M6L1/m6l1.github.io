@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>API on NEXUS-Link</title>
-    <link>http://172.19.188.148/tags/api/</link>
+    <link>https://m6l1.github.io/tags/api/</link>
     <description>Recent content in API on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 22 Feb 2024 20:02:15 +0700</lastBuildDate>
-    <atom:link href="http://172.19.188.148/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://m6l1.github.io/tags/api/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Comprehensive Guide to REST APIs and WebSocket</title>
-      <link>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</link>
+      <link>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</link>
       <pubDate>Thu, 22 Feb 2024 20:02:15 +0700</pubDate>
-      <guid>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</guid>
+      <guid>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</guid>
       <description>Dig into REST APIs and WebSocket</description>
     </item>
     <item>
       <title>API</title>
-      <link>http://172.19.188.148/recruitment/api/</link>
+      <link>https://m6l1.github.io/recruitment/api/</link>
       <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>http://172.19.188.148/recruitment/api/</guid>
+      <guid>https://m6l1.github.io/recruitment/api/</guid>
       <description>Field Application Engineer</description>
     </item>
   </channel>

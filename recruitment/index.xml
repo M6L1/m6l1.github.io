@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Recruitments on NEXUS-Link</title>
-    <link>http://172.19.188.148/recruitment/</link>
+    <link>https://m6l1.github.io/recruitment/</link>
     <description>Recent content in Recruitments on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 23 Feb 2023 11:11:36 +0700</lastBuildDate>
-    <atom:link href="http://172.19.188.148/recruitment/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://m6l1.github.io/recruitment/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>API</title>
-      <link>http://172.19.188.148/recruitment/api/</link>
+      <link>https://m6l1.github.io/recruitment/api/</link>
       <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>http://172.19.188.148/recruitment/api/</guid>
+      <guid>https://m6l1.github.io/recruitment/api/</guid>
       <description>Field Application Engineer</description>
     </item>
     <item>
       <title>DBA</title>
-      <link>http://172.19.188.148/recruitment/db-admin/</link>
+      <link>https://m6l1.github.io/recruitment/db-admin/</link>
       <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
-      <guid>http://172.19.188.148/recruitment/db-admin/</guid>
+      <guid>https://m6l1.github.io/recruitment/db-admin/</guid>
       <description>Database Administrator Engineer</description>
     </item>
     <item>
       <title>Data Analysis</title>
-      <link>http://172.19.188.148/recruitment/data-analysis-dae/</link>
+      <link>https://m6l1.github.io/recruitment/data-analysis-dae/</link>
       <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>http://172.19.188.148/recruitment/data-analysis-dae/</guid>
+      <guid>https://m6l1.github.io/recruitment/data-analysis-dae/</guid>
       <description>Data Analysis Engineer</description>
     </item>
     <item>
       <title>Data Analysis Assistant</title>
-      <link>http://172.19.188.148/recruitment/data-analysis-assistant/</link>
+      <link>https://m6l1.github.io/recruitment/data-analysis-assistant/</link>
       <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>http://172.19.188.148/recruitment/data-analysis-assistant/</guid>
+      <guid>https://m6l1.github.io/recruitment/data-analysis-assistant/</guid>
       <description>Assistant for Data Analysis</description>
     </item>
   </channel>

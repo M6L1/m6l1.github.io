@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on NEXUS-Link</title>
-    <link>http://172.19.188.148/categories/</link>
+    <link>https://m6l1.github.io/categories/</link>
     <description>Recent content in Categories on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Feb 2024 11:11:11 +0700</lastBuildDate>
-    <atom:link href="http://172.19.188.148/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 02 Mar 2024 11:02:15 +0700</lastBuildDate>
+    <atom:link href="https://m6l1.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Technotes</title>
-      <link>http://172.19.188.148/categories/technotes/</link>
-      <pubDate>Wed, 28 Feb 2024 11:11:11 +0700</pubDate>
-      <guid>http://172.19.188.148/categories/technotes/</guid>
+      <link>https://m6l1.github.io/categories/technotes/</link>
+      <pubDate>Sat, 02 Mar 2024 11:02:15 +0700</pubDate>
+      <guid>https://m6l1.github.io/categories/technotes/</guid>
       <description></description>
     </item>
     <item>
       <title>Recruitment</title>
-      <link>http://172.19.188.148/categories/recruitment/</link>
+      <link>https://m6l1.github.io/categories/recruitment/</link>
       <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>http://172.19.188.148/categories/recruitment/</guid>
+      <guid>https://m6l1.github.io/categories/recruitment/</guid>
       <description></description>
     </item>
   </channel>

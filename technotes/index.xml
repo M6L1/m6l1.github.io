@@ -2,38 +2,45 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Technotes on NEXUS-Link</title>
-    <link>http://172.19.188.148/technotes/</link>
+    <link>https://m6l1.github.io/technotes/</link>
     <description>Recent content in Technotes on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Feb 2024 11:11:11 +0700</lastBuildDate>
-    <atom:link href="http://172.19.188.148/technotes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 02 Mar 2024 11:02:15 +0700</lastBuildDate>
+    <atom:link href="https://m6l1.github.io/technotes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Useful tips of slice tricks in golang</title>
+      <link>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</link>
+      <pubDate>Sat, 02 Mar 2024 11:02:15 +0700</pubDate>
+      <guid>https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/</guid>
+      <description>Some slice tricks of golang</description>
+    </item>
     <item>
       <title>Using C in golang</title>
-      <link>http://172.19.188.148/technotes/using-c-in-golang/</link>
+      <link>https://m6l1.github.io/technotes/using-c-in-golang/</link>
       <pubDate>Wed, 28 Feb 2024 11:11:11 +0700</pubDate>
-      <guid>http://172.19.188.148/technotes/using-c-in-golang/</guid>
+      <guid>https://m6l1.github.io/technotes/using-c-in-golang/</guid>
       <description>How to use C in golang?</description>
     </item>
     <item>
       <title>Comprehensive Guide to REST APIs and WebSocket</title>
-      <link>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</link>
+      <link>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</link>
       <pubDate>Thu, 22 Feb 2024 20:02:15 +0700</pubDate>
-      <guid>http://172.19.188.148/technotes/comprehensive-guide-to-rest-apis-and-websocket/</guid>
+      <guid>https://m6l1.github.io/technotes/comprehensive-guide-to-rest-apis-and-websocket/</guid>
       <description>Dig into REST APIs and WebSocket</description>
     </item>
     <item>
       <title>Dark Side of C Programming Language</title>
-      <link>http://172.19.188.148/technotes/c-pitfalls/</link>
+      <link>https://m6l1.github.io/technotes/c-pitfalls/</link>
       <pubDate>Wed, 21 Feb 2024 20:02:15 +0700</pubDate>
-      <guid>http://172.19.188.148/technotes/c-pitfalls/</guid>
+      <guid>https://m6l1.github.io/technotes/c-pitfalls/</guid>
       <description>Pitfalls and tricks of C programming language</description>
     </item>
     <item>
       <title>Introduction to Kubernetes (K8s)</title>
-      <link>http://172.19.188.148/technotes/introduction-to-kubernetes/</link>
-      <pubDate>Thu, 18 Jan 2024 11:10:36 +0800</pubDate>
-      <guid>http://172.19.188.148/technotes/introduction-to-kubernetes/</guid>
+      <link>https://m6l1.github.io/technotes/introduction-to-kubernetes/</link>
+      <pubDate>Mon, 18 Dec 2023 11:10:36 +0800</pubDate>
+      <guid>https://m6l1.github.io/technotes/introduction-to-kubernetes/</guid>
       <description>A brief introduction of K8S</description>
     </item>
   </channel>
