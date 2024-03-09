@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Pitfalls of using slice in golang | NEXUS-Link 
+</title>
+<meta name="description" content="Something you don&#39;t know about slice" />
+<meta property="og:title" content="Pitfalls of using slice in golang | NEXUS-Link" />
+<meta name="twitter:title" content="Pitfalls of using slice in golang | NEXUS-Link" />
+<meta itemprop="name" content="Pitfalls of using slice in golang | NEXUS-Link" />
+<meta name="application-name" content="Pitfalls of using slice in golang | NEXUS-Link" />
+<meta property="og:description"
+      content="Something you don&#39;t know about slice" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/golang_gopher.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/golang_gopher.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Pitfalls of using slice in golang
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <p>Before discussing the core of the problem, let&rsquo;s first talk about pointers in Go.</p>
+<h3 id="go-language-pointers">Go Language Pointers</h3>
+<p>Go also has pointers, similar to C in concept and syntax, but pointer arithmetic is <strong>generally not allowed</strong>. For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">5</span>                <span style="color:#75715e">// a is an integer with a value of 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>               <span style="color:#75715e">// b is a pointer to a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}  <span style="color:#75715e">// c is an array of size 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>               <span style="color:#75715e">// d is a pointer to c
+</span></span></span></code></pre></div><p>Printing the values of a, b, c, and d would yield:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#a6e22e">a</span> = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span> = <span style="color:#ae81ff">0x20818c538</span>
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">0x20818c538</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">c</span> = [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">d</span> = <span style="color:#ae81ff">0x2081a0220</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span> = <span style="color:#ae81ff">0x2081a0220</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">d</span> = [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span>]
+</span></span></code></pre></div><p>Nothing special here, of course. You can also change the value of a through the pointer b:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">b</span> = <span style="color:#ae81ff">3</span>  <span style="color:#75715e">// a = 3, *b = 3
+</span></span></span></code></pre></div><p>What if you want to change the value of the second element in array c through pointer d? In C, you could do:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#f92672">*</span>(d<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>; <span style="color:#75715e">// c = [1 5 3]
+</span></span></span></code></pre></div><p>But in Go, the compiler will throw you this error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>invalid operation: d + <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>mismatched types *<span style="color:#f92672">[</span>3<span style="color:#f92672">]</span>int and int<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>The Go compiler says you can&rsquo;t add variables of two different types. Notice the compiler considers d&rsquo;s type as *<strong>[3]int</strong>, which includes the array size 3, hence arrays of different sizes in Go are also different types. Okay, what if you take a detour, move the pointer forward <strong>(d++)</strong> and then change the value? The compiler objects again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>invalid operation: d++ <span style="color:#f92672">(</span>non-numeric type *<span style="color:#f92672">[</span>3<span style="color:#f92672">]</span>int<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>This is what was meant by <strong>Go not allowing pointer arithmetic in general</strong>. Oh, then how can I modify the values in array c through pointer d? It&rsquo;s simple, just operate on pointer d the same way you access a regular array:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">d</span>[<span style="color:#ae81ff">1</span>] = <span style="color:#ae81ff">5</span>  <span style="color:#75715e">// c = [1 5 3]
+</span></span></span></code></pre></div><p>Now, let&rsquo;s look at an example of a structure pointer:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">student</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">id</span>   <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">tom</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">student</span>{<span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;Tom&#34;</span>, <span style="color:#a6e22e">id</span>: <span style="color:#ae81ff">3</span>}     <span style="color:#75715e">// tom is a student structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">mary</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">student</span>{<span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;Mary&#34;</span>, <span style="color:#a6e22e">id</span>: <span style="color:#ae81ff">5</span>}  <span style="color:#75715e">// mary is a pointer to a student structure
+</span></span></span></code></pre></div><p>Print out the students tom and mary:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">tom</span> = {<span style="color:#a6e22e">Tom</span> <span style="color:#ae81ff">3</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mary</span> = <span style="color:#f92672">&amp;</span>{<span style="color:#a6e22e">Mary</span> <span style="color:#ae81ff">5</span>}
+</span></span></code></pre></div><p>From the &amp; symbol, it&rsquo;s clear mary is indeed a pointer to a student structure. However, to reference structure members, both the instance variable and the pointer variable use the <strong>.</strong> operator, as there is no member access operator <strong>-&gt;</strong> like in C:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>println(<span style="color:#a6e22e">tom</span>.<span style="color:#a6e22e">name</span>)   <span style="color:#75715e">// Tom
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>println(<span style="color:#a6e22e">mary</span>.<span style="color:#a6e22e">name</span>)  <span style="color:#75715e">// Mary
+</span></span></span></code></pre></div><p>That&rsquo;s about it for pointers. Now, let&rsquo;s briefly talk about functions in Go.</p>
+<h3 id="a-brief-discussion-on-go-functions">A Brief Discussion on Go Functions</h3>
+<p>This introduction to Go functions aims to connect the content to the subsequent sections. Go functions vary more than those in C, and a dedicated article might be written later. For now, let&rsquo;s look at a few simple examples. First, declare a simple function with no input or output values, which prints a = 5 when called:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printVar</span>() {
+</span></span><span style="display:flex;"><span>	println(<span style="color:#e6db74">&#34;a = 5&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Then add an input parameter to the function to print the value of a specified variable:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printVar</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	println(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Of course, you can also pass in a pointer, similar to C:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printVar</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	println(<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span>)  <span style="color:#75715e">// Prints out 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">3</span>      <span style="color:#75715e">// Adds 3 to the value pointed to by the pointer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">printVar</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>println(<span style="color:#a6e22e">a</span>)       <span style="color:#75715e">// Prints out 8
+</span></span></span></code></pre></div><p>You can also add a return value to the function to get the modified value:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printVar</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	println(<span style="color:#a6e22e">a</span>)   <span style="color:#75715e">// Prints out 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">3</span>       <span style="color:#75715e">// This a is a copy of the original a, so it&#39;s actually a&#39; += 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>     <span style="color:#75715e">// Returns a&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">printVar</span>(<span style="color:#a6e22e">a</span>)  <span style="color:#75715e">// Assigns the returned value of printVar() to a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>println(<span style="color:#a6e22e">a</span>)       <span style="color:#75715e">// Prints out 8
+</span></span></span></code></pre></div><p>Value copying is just one way functions evaluate expressions, refer to <a href="http://en.wikipedia.org/wiki/Evaluation_strategy">evaluation strategies</a> for Call by value. Next, let&rsquo;s look at an example of structure passing in functions, declare a clearId() function, its purpose is to receive a pointer to a student structure and set the student&rsquo;s id field to 0:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">student</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">id</span>   <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">clearId</span>(<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">student</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">id</span> = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">tom</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">student</span>{<span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;Tom&#34;</span>, <span style="color:#a6e22e">id</span>: <span style="color:#ae81ff">3</span>}     <span style="color:#75715e">// tom is a student structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">mary</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">student</span>{<span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;Mary&#34;</span>, <span style="color:#a6e22e">id</span>: <span style="color:#ae81ff">5</span>}  <span style="color:#75715e">// mary is a pointer to a student structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">clearId</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tom</span>)  <span style="color:#75715e">// {Tom 0}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">clearId</span>(<span style="color:#a6e22e">mary</span>)  <span style="color:#75715e">// &amp;{Mary 0}
+</span></span></span></code></pre></div><p>Both functions receiving pointers can modify the passed-in values because the parameters are pointers, which is intuitive, so no special explanation is needed, and the results match predictions. That&rsquo;s the preparation work done; now, let&rsquo;s get into the main topic.</p>
+<h3 id="utilization-of-slice-in-go-functions">Utilization of slice in Go Functions</h3>
+<p>First, look at the following code, slicePlusOne() function accepts a []int type slice, then adds 1 to each element in the slice:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">slicePlusOne</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">a</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Before slicePlusOne() a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slicePlusOne</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34; After slicePlusOne() a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Before slicePlusOne<span style="color:#f92672">()</span> a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span> After slicePlusOne<span style="color:#f92672">()</span> a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span> 5<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>Good, as expected. Although the function&rsquo;s parameter doesn&rsquo;t indicate a is a pointer, the execution result successfully changed the value of slice a, <strong>thus naturally, the base type of slice is a pointer</strong>. Since it&rsquo;s a pointer, shouldn&rsquo;t changing the direction of the pointer change the values inside the slice? Let&rsquo;s look at another example, sliceChange() function accepts a []int type slice, then sets this slice to the global variable other_slice:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">other_slice</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Before resetting a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">other_slice</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34; After resetting a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Before sliceChange() a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34; After sliceChange() a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Before sliceChange<span style="color:#f92672">()</span> a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Before resetting a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span> After resetting a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">5</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">8</span> 9<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span> After sliceChange<span style="color:#f92672">()</span> a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>  // After the <span style="color:#66d9ef">function</span>, slice a was not changed
+</span></span></code></pre></div><p>The contents of the slice were not changed! What happened? Let&rsquo;s modify the program to print out the pointer content and see:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">other_slice</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Before resetting a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">other_slice</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;After resetting a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Before sliceChange() a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34; After sliceChange() a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Before sliceChange<span style="color:#f92672">()</span> a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, pointer address
+</span></span><span style="display:flex;"><span>Before resetting a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, new pointer address  // The pointer address changes upon entering the <span style="color:#66d9ef">function</span>
+</span></span><span style="display:flex;"><span> After resetting a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">5</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">8</span> 9<span style="color:#f92672">]</span>, new pointer address
+</span></span><span style="display:flex;"><span> After sliceChange<span style="color:#f92672">()</span> a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, original pointer address
+</span></span></code></pre></div><p>It&rsquo;s found that when the slice is passed in, the pointer address is already different! So how did the earlier example, slicePlusOne(), manage to successfully modify? Add print messages inside slicePlusOne() to see the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">slicePlusOne</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Before resetting a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">a</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34; After resetting a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Before slicePlusOne() a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slicePlusOne</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34; After slicePlusOne() a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>The result of executing this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Before slicePlusOne<span style="color:#f92672">()</span> a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, original pointer address
+</span></span><span style="display:flex;"><span>Before resetting a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, new pointer address  // The pointer address changes upon entering the <span style="color:#66d9ef">function</span>
+</span></span><span style="display:flex;"><span> After resetting a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span> 5<span style="color:#f92672">]</span>, new pointer address
+</span></span><span style="display:flex;"><span> After slicePlusOne<span style="color:#f92672">()</span> a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span> 5<span style="color:#f92672">]</span>, original pointer address
+</span></span></code></pre></div><p>Just like the previous example, the pointer address is already different when the slice is passed in! So why did slicePlusOne() manage to modify the values inside the slice, but sliceChange() did not? Here, we need to dive deeper into what a slice type really is in Go.</p>
+<h3 id="go-language-slices">Go Language Slices</h3>
+<p>Simply put, a slice is an array without a fixed length. However, at the language implementation level, the slice type is actually a composite type consisting of three parts, as shown in the <a href="http://blog.golang.org/go-slices-usage-and-internals#slice-internals">Golang blog</a>:</p>
+<p><img src="https://go.dev/blog/slices-intro/slice-struct.png" alt="slice internal" title="slice internal"></p>
+<ul>
+<li>ptr points to the first element in memory that the slice refers to</li>
+<li>len indicates the length of the slice</li>
+<li>cap indicates the capacity of the slice</li>
+</ul>
+<p>A slice with both length and capacity of 5, and its relationship with the memory it points to, is illustrated like this in the <a href="http://blog.golang.org/go-slices-usage-and-internals#slice-internals">Golang blog</a>:</p>
+<p><img src="https://go.dev/blog/slices-intro/slice-1.png" alt="slice and memory" title="slice and memory"></p>
+<p>Using the following example to illustrate the relationship between a slice and memory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>}  <span style="color:#75715e">// len(a) = 2, cap(a) = 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}  <span style="color:#75715e">// len(b) = 2, cap(b) = 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Initially a, &amp;a, &amp;a[0], &amp;a[1] = %v, %p, %p, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>], <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Initially  b, &amp;b, &amp;b[0], &amp;b[1] = %v, %p, %p, %p\n&#34;</span>, <span style="color:#a6e22e">b</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>[<span style="color:#ae81ff">0</span>], <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">a</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;After setting b, &amp;b, &amp;b[0], &amp;b[1] = %v, %p, %p, %p\n&#34;</span>, <span style="color:#a6e22e">b</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>[<span style="color:#ae81ff">0</span>], <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>[<span style="color:#ae81ff">1</span>])
+</span></span></code></pre></div><p>The result of running this program is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Initially a, &amp;a, &amp;a<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, &amp;a<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> 1<span style="color:#f92672">]</span>, 0x20819e020, 0x20818a220, 0x20818a228
+</span></span><span style="display:flex;"><span>Initially b, &amp;b, &amp;b<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, &amp;b<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, 0x20819e040, 0x20818a230, 0x20818a238
+</span></span><span style="display:flex;"><span>// After b <span style="color:#f92672">=</span> a, the address of b<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> address of a<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>; the address of b<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> address of a<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>After setting b, &amp;b, &amp;b<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, &amp;b<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> 1<span style="color:#f92672">]</span>, 0x20819e040, 0x20818a220, 0x20818a228
+</span></span></code></pre></div><p>The address <strong>0x20819e040</strong> pointing to slice b, which stores the slice b structure in memory and is referred to when operating slice b in the program, hasn&rsquo;t changed. However, the address inside ptr that it points to has changed, now pointing to the memory address inside the slice a structure. Representing this segment in a diagram looks like this:</p>
+<p><img src="/technotes/golang_slice_in_memory.png" alt="slice and memory" title="slice a, b and memory"></p>
+<p>Using pointers instead of copying memory increases program execution efficiency. From this example, it&rsquo;s clear that assigning a slice in Go only swaps the memory address pointed to by the internal ptr of the slice structure. So, although <strong>slices look and operate like pointers, they are actually a composite structure type that includes a pointer address</strong>!</p>
+<p>Now, let&rsquo;s examine another phenomenon when operating slices to deepen our understanding of this type. Previous articles mentioned how to extract a part of a slice into a new slice. The example discussed here is <a href="#extracting-a-part-of-a-slice-into-a-new-slice">extracting a part of an array into a new slice</a>, with the operation method being exactly the same. Please see the following code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Declare an array of length 6
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">array</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">6</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Declare a slice equal to all elements within the range 1 &lt;= {x} &lt; 3 in the array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">3</span>]
+</span></span></code></pre></div><p>This operation is clear, the content of the slice will be equal to elements array[1] and array[2]. Print out the slice to verify:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;len(slice) =&#34;</span>, len(<span style="color:#a6e22e">slice</span>), <span style="color:#e6db74">&#34;, slice =&#34;</span>, <span style="color:#a6e22e">slice</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// len(slice) = 2 , slice = [1 2]
+</span></span></span></code></pre></div><p>Everything seems fine, almost as expected. Now, let&rsquo;s perform another operation on this slice:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Originally, slice = [1 2]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">slice</span> = <span style="color:#a6e22e">slice</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// New slice = ?
+</span></span></span></code></pre></div><p>How is this operation of extracting a sub-slice of 3 elements, from indices 2 to 5, from a slice that currently has only 2 elements and indices from 0 to 1 possible? Let&rsquo;s see the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;len(slice) =&#34;</span>, len(<span style="color:#a6e22e">slice</span>), <span style="color:#e6db74">&#34;, slice =&#34;</span>, <span style="color:#a6e22e">slice</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// len(slice) = 3 , slice = [3 4 5]
+</span></span></span></code></pre></div><p>Surprisingly, it successfully extracts a new slice with elements completely unrelated to the original slice! How did this happen? How could a slice of length 2 manage to extract 3 elements? Is there something beyond the indices of this slice? Let&rsquo;s try accessing values beyond the slice&rsquo;s index to see the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;slice[2] =&#34;</span>, <span style="color:#a6e22e">slice</span>[<span style="color:#ae81ff">2</span>])
+</span></span></code></pre></div><p>This results in a runtime error message that crashes the program:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>panic: runtime error: index out of range
+</span></span></code></pre></div><p>It seems this slice only has a length of 2, with contents 1 and 2. Up to this point, the information we have isn&rsquo;t enough for further judgment, so what we need to do is gather more in-depth information for analysis. Therefore, rewrite the previous program to print out all information about the slice again and see the result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">array</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">6</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>}
+</span></span></code></pre></div><p>The result of running this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;len(slice) =&#34;</span>, len(<span style="color:#a6e22e">slice</span>), <span style="color:#e6db74">&#34;,cap(slice) =&#34;</span>, cap(<span style="color:#a6e22e">slice</span>), <span style="color:#e6db74">&#34;,slice =&#34;</span>, <span style="color:#a6e22e">slice</span>)&lt;<span style="color:#a6e22e">br</span> <span style="color:#f92672">/</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slice</span> = <span style="color:#a6e22e">slice</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;len(slice) =&#34;</span>, len(<span style="color:#a6e22e">slice</span>), <span style="color:#e6db74">&#34;,cap(slice) =&#34;</span>, cap(<span style="color:#a6e22e">slice</span>), <span style="color:#e6db74">&#34;,slice =&#34;</span>, <span style="color:#a6e22e">slice</span>)&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">code</span>&gt;&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">pre</span>&gt;
+</span></span></code></pre></div><p>The result of running this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>len(<span style="color:#a6e22e">slice</span>) = <span style="color:#ae81ff">2</span> ,cap(<span style="color:#a6e22e">slice</span>) = <span style="color:#ae81ff">5</span> ,<span style="color:#a6e22e">slice</span> = [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>len(<span style="color:#a6e22e">slice</span>) = <span style="color:#ae81ff">3</span> ,cap(<span style="color:#a6e22e">slice</span>) = <span style="color:#ae81ff">3</span> ,<span style="color:#a6e22e">slice</span> = [<span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">5</span>]
+</span></span></code></pre></div><p>Originally, after the first step of extracting a part of the array into a slice, the new slice&rsquo;s capacity was already 5, not the superficially apparent length of 2! Extracting 3 elements from a total capacity of 5 in the slice is, of course, no problem! So, how exactly is the data stored for this slice generated from the array? Explaining with a diagram makes it clearer:</p>
+<p><img src="/technotes/slice_capacity_in_golang.png" alt="slice capacity in golang" title="slice capacity in golang"></p>
+<p>The yellow block in the diagram represents the original array&rsquo;s allocated space in memory, with a total of 6 elements from 0 to 5. The purple represents the slice&rsquo;s length, and pink represents the slice&rsquo;s capacity. The two large sections represent the operations of extracting a sub-slice from an array and extracting a sub-slice from a slice, respectively. In the initial operation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">3</span>]
+</span></span></code></pre></div><p>The slice represents the starting address <strong>slice[0]</strong>&rsquo;s pointer address pointing to the memory address of <strong>array[1]</strong>, and then recalculates and updates the slice&rsquo;s length and capacity in the related data fields of the slice. The calculation of the length part is straightforward; when using the <strong>[i:j]</strong> syntax, the new slice&rsquo;s length is already decided to be <strong>j-i</strong>. In this example, it&rsquo;s <strong>3-1</strong>, so the length is 2. The capacity calculation is from the address pointed to by <strong>slice[0]</strong> all the way to the maximum value allocated initially for the array, which is <strong>cap(array)-i</strong>. In this example, it&rsquo;s <strong>6-1</strong>, so the capacity is 5.</p>
+<p>Understanding the logic behind this part of the operation, the following operation now looks clear:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">slice</span> = <span style="color:#a6e22e">slice</span>[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">5</span>]
+</span></span></code></pre></div><p>Because the internal pointer of the slice has been <strong>redirected</strong> to point to the memory address where the array&rsquo;s values are located, the current <strong>slice[0]</strong> is equivalent to the previous <strong>array[1]</strong>. So, this expression can be replaced with equivalent code as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// slice[0] = array[1], therefore slice[2:5] = array[3:6]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">slice</span> = <span style="color:#a6e22e">array</span>[<span style="color:#ae81ff">3</span>:<span style="color:#ae81ff">6</span>]
+</span></span></code></pre></div><p>Since the expression is equivalent to extracting all elements within the range 3 &lt;= {x} &lt; 6 from the original array, the final content collection of the slice will, of course, be the elements 3, 4, 5. Writing the process of getting a sub-slice from the array as a template expression is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[<span style="color:#a6e22e">i</span>:<span style="color:#a6e22e">j</span>]
+</span></span><span style="display:flex;"><span>len(<span style="color:#a6e22e">slice</span>) = <span style="color:#a6e22e">j</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>cap(<span style="color:#a6e22e">slice</span>) = cap(<span style="color:#a6e22e">array</span>) <span style="color:#f92672">-</span> <span style="color:#a6e22e">i</span>
+</span></span></code></pre></div><p>If i and j are not explicitly assigned, like in the <strong>[:]</strong> syntax that uses all elements, how should the template expression be written? It&rsquo;s simple, because the <strong>[:]</strong> shorthand syntax actually means <strong>[0:len(array)]</strong>, inserting i and j gives <strong>i = 0, j = len(array)</strong>. Applying it to the template expression above results in:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[:]        <span style="color:#75715e">// slice := array[0:len(array)]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>len(<span style="color:#a6e22e">slice</span>) = len(<span style="color:#a6e22e">array</span>)  <span style="color:#75715e">// len(array) - 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>cap(<span style="color:#a6e22e">slice</span>) = cap(<span style="color:#a6e22e">array</span>)  <span style="color:#75715e">// cap(array) - 0
+</span></span></span></code></pre></div><p>Since the size of an array must be explicitly declared at declaration time and cannot be changed, the length and capacity of an array are the same and fixed. Therefore, even if len(array) or cap(array) are used interchangeably in this segment of code, the result remains the same. Here, the length of the slice is calculated by subtracting the starting address from len(array), and the capacity of the slice is calculated by subtracting the starting address from cap(array), aiming to <strong>make the language&rsquo;s statements more explicitly expressive</strong>.</p>
+<p>Finally, summarizing the key points of the slice type:</p>
+<ol>
+<li>A pointer pointing to the first element in memory that the slice refers to</li>
+<li>An int representing the length of the slice, equal to the number of elements it contains</li>
+<li>An int representing the capacity of the slice, equal to the number of elements contained in the memory pointed to by the slice minus the index of the starting element of the slice</li>
+</ol>
+<p>After this section, understanding the slice type in Go should be clear. Next, let&rsquo;s return to the behavior of slices in functions and analyze why the previous examples had issues.</p>
+<h3 id="the-truth-revealed">The Truth Revealed</h3>
+<p>Returning to the previous function code examples, let&rsquo;s now understand them line by line:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Declare a slice named other_slice
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">other_slice</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Accepts a slice parameter
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Since it accepts a value, the function makes a value copy, so the internal a is actually a&#39;, hence the address is different!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// The next line a = other_slice, actually means a&#39; = other_slice!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">other_slice</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Declare a slice named a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Because a slice is a composite structure type, it&#39;s passed by value here!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>Although a slice is passed by value into the function, the memory address pointed to by the internal ptr of the slice structure is still correct. To verify this, rewrite the code as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">other_slice</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Before resetting a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Directly operate on the elements inside the slice
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">a</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">other_slice</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;After resetting a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Before sliceChange() a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34; After sliceChagne() a, &amp;a = %v, %p\n&#34;</span>, <span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>The execution result is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Before sliceChange<span style="color:#f92672">()</span> a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, 0x20819e020
+</span></span><span style="display:flex;"><span>Before resetting a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>, 0x20819e080
+</span></span><span style="display:flex;"><span> After resetting a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">5</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">8</span> 9<span style="color:#f92672">]</span>, 0x20819e080
+</span></span><span style="display:flex;"><span> AFter sliceChange<span style="color:#f92672">()</span> a, &amp;a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">5</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">8</span> 9<span style="color:#f92672">]</span>, 0x20819e020  // Successfully changed the values inside slice a
+</span></span></code></pre></div><p>Indeed, it successfully changed the values inside slice a! This code also explains why slicePlusOne() was able to successfully change the values inside the slice because the operations on the slice through [i] actually reference the memory address pointed to by the internal ptr of the slice structure, so of course, there are no issues! Therefore, you can also use the method mentioned in the <a href="#a-brief-discussion-on-go-functions">previous section on functions</a>, changing the function parameter to a slice pointer, to achieve the same effect. Here is the code for this approach:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">other_slice</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span>[]<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">*</span><span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">other_slice</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sliceChange</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>Or achieve the same effect by returning the modified copy value from within the function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">other_slice</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>) []<span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">other_slice</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">sliceChange</span>(<span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><h3 id="hands-on-practice">Hands-on Practice</h3>
+<p>At this point, I believe the explanation has been quite clear. So, when you encounter such code in the future, you&rsquo;ll know how to modify it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">myAppend</span>(<span style="color:#a6e22e">a</span> []<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">e</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> = append(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">e</span>) <span style="color:#75715e">// actually, it&#39;s a&#39; = append(a&#39;, 3)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)   <span style="color:#75715e">// a = [0 1 2 3], actually, a&#39; = [0 1 2 3]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)       <span style="color:#75715e">// a = [0 1 2]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">myAppend</span>(<span style="color:#a6e22e">a</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)       <span style="color:#75715e">// a = [0 1 2]
+</span></span></span></code></pre></div><h3 id="further-reading">Further Reading</h3>
+<ul>
+<li><a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/">Useful tips of slice tricks in golang</a></li>
+<li><a href="http://golangtutorials.blogspot.tw/2011/06/memory-variables-in-memory-and-pointers.html">Memory, variables in memory, and pointers</a></li>
+<li><a href="http://blog.golang.org/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+</ul>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>
