@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> Manipulating pointers in golang | NEXUS-Link 
+</title>
+<meta name="description" content="How to use pointers in golang?" />
+<meta property="og:title" content="Manipulating pointers in golang | NEXUS-Link" />
+<meta name="twitter:title" content="Manipulating pointers in golang | NEXUS-Link" />
+<meta itemprop="name" content="Manipulating pointers in golang | NEXUS-Link" />
+<meta name="application-name" content="Manipulating pointers in golang | NEXUS-Link" />
+<meta property="og:description"
+      content="How to use pointers in golang?" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/manipulating-pointers-in-golang/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/golang_gopher.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/golang_gopher.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        Manipulating pointers in golang
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_gopher_hu1a0a654813e9ea9ed08c3ee9e584fa43_340482_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h3 id="no-problem-its-about-pointers">No problem, it&rsquo;s about pointers!</h3>
+<p>A previous article mentioned the <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/">issues to be aware</a> of when using slices in Go language functions. <strong>Normally, Go language does not support pointer arithmetic</strong>, but if you&rsquo;ve also read the article about <a href="https://m6l1.github.io/technotes/using-c-in-golang/">using C language code in Go</a>, you would discover that there is a package called <a href="http://golang.org/pkg/unsafe/">unsafe</a> in Go, which includes a type called Pointer, essentially behaving much like the <strong>void</strong>* pointer in C language! Since we have the <strong>void</strong>* pointer available, and the package name is also <strong>unsafe</strong>, doesn&rsquo;t it imply that programmers can <del><strong>fully exploit</strong></del> this package to do potentially unsafe things? So, the idea is this: since programmers have actively imported the <strong>unsafe</strong> package, it theoretically means they know what they are doing. And from the name <strong>unsafe</strong>, it&rsquo;s clear that we are not in the so-called <strong>normal situation</strong>, so the Go compiler should not interfere too much! From now on, let me use the pointers <strong>like a pro</strong>!</p>
+<p>In the following sections, some examples will be given to explain how to use the functions provided by the unsafe package.</p>
+<h3 id="go-languages-unsafepointer-and-uintptr">Go Language&rsquo;s unsafe.Pointer and uintptr</h3>
+<p>Regarding pointers in Go language, you can refer to the previously written section <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/#go-language-pointers">Go Language&rsquo;s Pointers</a>. Its basic behavior is completely identical to C language, except that you cannot perform pointer arithmetic. The <strong>Pointer</strong> type located in the unsafe package is for careless coders to create more problems cautious programmers to fill this gap. Let&rsquo;s take a look at the type definition of <strong>Pointer</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Pointer</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ArbitraryType</span>
+</span></span></code></pre></div><p>Go language documentation describes <strong>Pointer</strong> as an alias for <strong>a pointer to the ArbitraryType type</strong>. Continuing to the definition of ArbitraryType:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ArbitraryType</span> <span style="color:#66d9ef">int</span>
+</span></span></code></pre></div><p>It turns out that ArbitraryType is just an alias for <strong>int</strong>. In Go language, the int type automatically adjusts to the longest integer type supported by the hardware environment, and it occupies at least 4 bytes. Therefore, the <strong>Pointer</strong> type, simply put, <strong>is a pointer whose memory capacity is the size of an integer type</strong>. A <strong>Pointer</strong> of size int can accommodate the size of all types of pointers, thus it can be used as <strong>void</strong>* in C language. The following code simultaneously demonstrates the size of <strong>unsafe.Pointer</strong> and the behavior that int automatically adjusts to the longest integer size (the execution environment of the program is a 64-bit machine):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">int_auto</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">int_64</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">unsafe_ptr</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;  int_auto =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">int_auto</span>))  <span style="color:#75715e">//   int_auto = 8
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;    int_64 =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">int_64</span>))    <span style="color:#75715e">//     int_64 = 8
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;unsafe_ptr =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">ptr</span>))       <span style="color:#75715e">// unsafe_ptr = 8
+</span></span></span></code></pre></div><p>Okay. Let&rsquo;s start from the simplest pointer operation. The example used is the first example in the section <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/#go-language-pointers">Go Language&rsquo;s Pointers</a>, where we hope to change the value of c[1] from 2 to 5 through the new pointer address after pointer arithmetic.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}  <span style="color:#75715e">// c is an array of size 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>               <span style="color:#75715e">// d is a pointer to c
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">*</span>(<span style="color:#a6e22e">d</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>) = <span style="color:#ae81ff">5</span>            <span style="color:#75715e">// This line will cause a compilation error!
+</span></span></span></code></pre></div><p>The third line will cause a compilation error because you cannot directly perform pointer arithmetic on a regular pointer. But now we have the <strong>unsafe</strong> package, and the code can be modified as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">one</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">c</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">d</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">one</span>)) = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;c =&#34;</span>, <span style="color:#a6e22e">c</span>)
+</span></span></code></pre></div><p>The program execution result is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">c</span> = [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">3</span>]  <span style="color:#75715e">// Successfully changed the value of c[1]
+</span></span></span></code></pre></div><p>Before delving deeper into the code, it is recommended that readers first understand <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/#utilization-of-slice-in-go-functions">what the slice type is</a>. Assuming that&rsquo;s clear, we can now start explaining the code.</p>
+<p>First is the calculation of one:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">one</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">c</span>[<span style="color:#ae81ff">0</span>])
+</span></span></code></pre></div><p>Here, the <strong>Sizeof()</strong> function from the unsafe package is used to obtain the size of a single element in the slice in memory, which is then stored in the variable one. This variable will be used later for pointer arithmetic.</p>
+<p>The <strong>Sizeof()</strong> function returns a type of <strong>uintptr</strong>, which is very special. It is <strong>the only pointer type</strong> in Go language that can perform pointer arithmetic, and apart from pointers of type <strong>unsafe.Pointer</strong>, all pointers <strong>cannot be</strong> directly converted to <strong>uintptr</strong>! Therefore, the way to convert a regular pointer to a <strong>uintptr</strong> pointer must be:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// And then you can perform pointer arithmetic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pointer</span> <span style="color:#a6e22e">to</span> <span style="color:#a6e22e">any</span> <span style="color:#66d9ef">type</span>))
+</span></span></code></pre></div><p>Rules for converting between pointers can also be seen at the bottom of <a href="http://golang.org/pkg/unsafe/#Pointer">this page</a>:</p>
+<ol>
+<li>A pointer value of any type can be converted to a <strong>Pointer</strong>.</li>
+<li>A <strong>Pointer</strong> can be converted to a pointer value of any type.</li>
+<li>A <strong>uintptr</strong> can be converted to a <strong>Pointer</strong>.</li>
+<li>A <strong>Pointer</strong> can be converted to a <strong>uintptr</strong>.</li>
+</ol>
+<p>Using graphics would make it clearer:</p>
+<p><img src="/technotes/pointer_conversion_in_golang.png" alt="Pointer conversion in golang" title="Pointer conversion in golang"></p>
+<p>From this diagram, it&rsquo;s not hard to understand why Go language&rsquo;s <strong>unsafe.Pointer</strong> is like C language&rsquo;s <strong>void</strong>*</p>
+<p>Next, let&rsquo;s continue explaining the declaration of d in the code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">d</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>[<span style="color:#ae81ff">0</span>]))
+</span></span></code></pre></div><p>In short, this line is the process of converting from *<strong>int</strong> to <strong>uintptr</strong> through <strong>unsafe.Pointer</strong>, which can be broken down into equivalent code as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">intPtr</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>[<span style="color:#ae81ff">0</span>]                     <span style="color:#75715e">// *int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">voidPtr</span> <span style="color:#f92672">:=</span> (<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">intPtr</span>)  <span style="color:#75715e">// unsafe.Pointer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">voidPtr</span>)         <span style="color:#75715e">// uintptr
+</span></span></span></code></pre></div><p><strong>&amp;c[0]</strong> indicates the address of the first element of the slice c. Why not use <strong>&amp;c</strong> still requires the reader to first understand <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/#go-language-slices">what the slice type is</a>. Next is to convert the pointer intPtr, which points to c[0] and is of type <strong>*int</strong>, to <strong>unsafe.Pointer</strong>. As mentioned before, <strong>unsafe.Pointer</strong> in Go language is like <strong>void</strong>* in C language, so it needs to be converted to this type of pointer before converting to other types of pointers. The outermost layer of this expression does the last conversion, converting the <strong>unsafe.Pointer</strong> pointer to a <strong>uintptr</strong> pointer.</p>
+<p>The next code to explain is the key expression for pointer arithmetic:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">d</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">one</span>)) = <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>The pointer conversion process of this expression is actually the reverse operation of the previous line, from <strong>uintptr</strong> back to *<strong>int</strong> through <strong>unsafe.Pointer</strong>. This expression can be broken down into equivalent code as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">d</span> = <span style="color:#a6e22e">d</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">one</span>                         <span style="color:#75715e">// uintptr
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">voidPtr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">d</span>)        <span style="color:#75715e">// unsafe.Pointer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">intPtr</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">voidPtr</span>)           <span style="color:#75715e">// *int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">*</span><span style="color:#a6e22e">intPtr</span> = <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>The variable d and the variable one are both of type <strong>uintptr</strong>, emphasizing again that this is <strong>the only pointer type</strong> in Go language that can perform pointer arithmetic, so adding them together achieves the operation of moving the pointer forward by one index.</p>
+<p>The second line converts <strong>uintptr</strong> to <strong>unsafe.Pointer</strong>.</p>
+<p>The third line converts it to *<strong>int</strong>.</p>
+<p>The final line&rsquo;s variable <strong>intPtr</strong> is already a pointer *<strong>int</strong> pointing to the memory address of the element of slice c, so the method to change the value at the memory address it points to is *<strong>intPtr = 5</strong>.</p>
+<p>You might ask, why not directly perform the following operation on the variable d of type uintptr:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">d</span> = <span style="color:#a6e22e">d</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">one</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">d</span> = <span style="color:#ae81ff">5</span>        <span style="color:#75715e">// Already got the pointer, why not directly set the value to 5 after dereferencing?
+</span></span></span></code></pre></div><p>Or perform the following operation on the variable <strong>voidPtr</strong> of type <strong>unsafe.Pointer</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">voidPtr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">d</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">voidPtr</span> = <span style="color:#ae81ff">5</span>  <span style="color:#75715e">// Already got the pointer, why not directly set the value to 5 after dereferencing?
+</span></span></span></code></pre></div><p>The reason for specifically converting back to *<strong>int</strong> before setting the value is simple, let&rsquo;s review again, Go language is a <a href="http://en.wikipedia.org/wiki/Strong_and_weak_typing">strongly typed</a> language, it requires explicit conversion of various types before performing operations appropriate for that type! Since you intend to change the value of c[1] from 2 to 5, which is an int type, you naturally need to convert the pointer back to <strong>*int</strong> type for operation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">intPtr</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">voidPtr</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">intPtr</span> = <span style="color:#ae81ff">5</span>   <span style="color:#75715e">// This is a legal pointer value setting operation of the same type!
+</span></span></span></code></pre></div><p>So far, the rules for manipulating pointers in Go language can be summarized as:</p>
+<ul>
+<li>Only pointers of type <strong>uintptr</strong> can perform pointer arithmetic operations.</li>
+<li>Only <strong>pointers to general types</strong> can change values in memory.</li>
+<li>Converting between these two types of pointers relies on <strong>unsafe.Pointer</strong>.</li>
+</ul>
+<p>Let&rsquo;s look at another example, adding 1 to every element in slice a through <strong>unsafe.Pointer</strong> and <strong>uintptr</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Declare a slice a of length 5
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Calculate the size of one pointer shift
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">ptrSize</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Declare ptr as a pointer to the address of the first element of slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ptr</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Print the value of slice a before pointer manipulation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Before pointer manipulation a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Use pointer manipulation to add one to the value of every element in slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">a</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Add 1 to the value at the pointer address
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">ptr</span>)) <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Move the pointer to the next address
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ptr</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">ptrSize</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Print the value of slice a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;After pointer manipulation a =&#34;</span>, <span style="color:#a6e22e">a</span>)
+</span></span></code></pre></div><p>The execution result of the program is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Before pointer manipulation a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> 4<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>After pointer manipulation a <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span> 5<span style="color:#f92672">]</span>  // Successfully added <span style="color:#ae81ff">1</span> to the contents of the slice through pointer manipulation
+</span></span></code></pre></div><p>The logic is exactly the same, try to deduce it yourself, and you will understand immediately. The only thing to note here is that when doing pointer arithmetic in Go language, the compiler does not automatically calculate the size of the pointer unit for you, you must explicitly calculate the size of each shift before performing the operation, as an example of C language code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">charAry</span>[] = {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pCharAry</span> = <span style="color:#a6e22e">charAry</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pCharAry</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;*pCharAry = %d\n&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">pCharAry</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">intAry</span>[] = {<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pIntAry</span> = <span style="color:#a6e22e">intAry</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pIntAry</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34; *pIntAry = %d\n&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">pIntAry</span>);
+</span></span></code></pre></div><p>The result printed by this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>*pCharAry <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>*pIntAry <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>In C language, when a pointer performs ++ operation, the compiler knows to move according to the size of the memory space occupied by different pointers. So <strong>pCharAry</strong>++ moves by <strong>sizeof(char)</strong>, <strong>pIntAry++</strong> moves by <strong>sizeof(int)</strong>. But if you perform similar operations in Go language, the results would be unexpected:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">charAry</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pCharAry</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">charAry</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pCharAry</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;*pCharAry = %d\n&#34;</span>, <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">byte</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pCharAry</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">intAry</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pIntAry</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">intAry</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pIntAry</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34; *pIntAry = %d\n&#34;</span>, <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pIntAry</span>)))
+</span></span></code></pre></div><p>The result of this code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">pCharAry</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span><span style="color:#a6e22e">pIntAry</span> = <span style="color:#ae81ff">72057594037927936</span>
+</span></span></code></pre></div><p>In Go language, incrementing a pointer with ++ is interpreted as moving it forward by one byte. Therefore, for a pointer of type *<strong>byte</strong>, like pCharAry, the result is still correct. However, for a pointer of type <strong>*int</strong> like pIntAry, it is incorrect. The code can be modified as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">charAry</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pCharAry</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">charAry</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pCharAry</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">charAry</span>[<span style="color:#ae81ff">0</span>])  <span style="color:#75715e">// Move by the memory size of one byte
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;*pCharAry = %d\n&#34;</span>, <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">byte</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pCharAry</span>)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">intAry</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pIntAry</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">intAry</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pIntAry</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">intAry</span>[<span style="color:#ae81ff">0</span>])    <span style="color:#75715e">// Move by the memory size of one int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;*pIntAry = %d\n&#34;</span>, <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pIntAry</span>)))
+</span></span></code></pre></div><p>This modification yields the correct result:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>*pCharAry <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>*pIntAry <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><h3 id="using-pointers-with-composite-types">Using Pointers with Composite Types</h3>
+<p>Suppose there is a structure named Student as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Define a Student structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Student</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">name</span>    <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">id</span>      <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">grade</span>   <span style="color:#66d9ef">float32</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">friends</span> []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Declare an empty student variable to represent this structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">student</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Student</span>{}
+</span></span></code></pre></div><p>This Student structure contains 4 members: the student&rsquo;s name, ID, grade, and a list of friends. Next, let&rsquo;s see how to use functions provided in the unsafe package to manipulate this structure.</p>
+<p>First is the frequently mentioned <strong>Sizeof()</strong> function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Size of Student.name      =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">name</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Size of Student.id        =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">id</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Size of Student.grade     =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">grade</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Size of Student.friends   =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">friends</span>))
+</span></span></code></pre></div><p>The execution result of this code is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Size of Student.name      <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>Size of Student.id        <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>Size of Student.grade     <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>Size of Student.friends   <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>
+</span></span></code></pre></div><p>Sizeof() reports the memory size occupied by the passed object, and the returned value is of type <strong>uintptr</strong>, which can be used directly for pointer arithmetic. Among these, the <strong>string</strong> and <strong>[]string</strong> types might raise questions. Let&rsquo;s start with the latter. friends is a slice type with string elements. If you remember <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/#go-language-slices">this section</a> about slices, you&rsquo;ll know that a slice is a composite type containing three parts: a pointer to the first memory address of the referenced memory, an int representing the length of the slice, and an int representing the capacity of the slice. Therefore, regardless of what is stored inside, the size of a slice on the same bit machine is fixed, as shown in the examples below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">slice_byte</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slice_int</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slice_string</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slice_complicate</span> <span style="color:#f92672">:=</span> [][][][]<span style="color:#66d9ef">string</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">slice_struct</span> <span style="color:#f92672">:=</span> []<span style="color:#a6e22e">Student</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">slice_byte</span>))        <span style="color:#75715e">// 24 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">slice_int</span>))         <span style="color:#75715e">// 24
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">slice_string</span>))      <span style="color:#75715e">// 24
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">slice_complicate</span>))  <span style="color:#75715e">// 24
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">slice_struct</span>))      <span style="color:#75715e">// 24
+</span></span></span></code></pre></div><p>Simply put, on my 64-bit machine, a slice is composed of 3 parameters, each occupying 8 bytes, so the size of a slice is 8 * 3 = 24. Understanding slices makes it easy to see why the size of a string is 16, as a string in Go language is also a composite type, containing a pointer to the first character&rsquo;s memory address in the string and an int representing the string&rsquo;s length, making the size of a string naturally 8 * 2 = 16.</p>
+<p>Next, let&rsquo;s look at another function from the unsafe package, Offsetof():</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Offset of Student.name    =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">name</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Offset of Student.id      =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">id</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Offset of Student.grade   =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">grade</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Offset of Student.friends =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">friends</span>))
+</span></span></code></pre></div><p>The execution result of this code is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">Offset</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">name</span>    = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Offset</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">id</span>      = <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Offset</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">grade</span>   = <span style="color:#ae81ff">24</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Offset</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">friends</span> = <span style="color:#ae81ff">32</span>
+</span></span></code></pre></div><p>This function helps you find the offset of a structure member relative to the structure&rsquo;s initial memory address. Since the return type is also <strong>uintptr</strong>, it is clearly designed to facilitate pointer arithmetic by programmers.</p>
+<p>The last function in the unsafe package we&rsquo;ll look at is Alignof():</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Align of Student.name     =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">name</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Align of Student.id       =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">id</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Align of Student.grade    =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">grade</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Align of Student.friends  =&#34;</span>, <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">friends</span>))
+</span></span></code></pre></div><p>The execution result of this code is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">Align</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">name</span>     = <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Align</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">id</span>       = <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Align</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">grade</span>    = <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Align</span> <span style="color:#a6e22e">of</span> <span style="color:#a6e22e">Student</span>.<span style="color:#a6e22e">friends</span>  = <span style="color:#ae81ff">8</span>
+</span></span></code></pre></div><p>If you have read the <a href="https://m6l1.github.io/technotes/c-pitfalls/#struct-alignment">previous section</a> I wrote, the alignment of structs should be familiar. Although the previous article was explained in the context of C language, the purpose and concept of struct alignment are completely the same in these two languages.</p>
+<p>Now, having introduced all functions in the unsafe package, let&rsquo;s practice how to directly operate on structs using these functions:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Declare a pointer of type uintptr, pointing to the address of the student variable
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">student</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set the name
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">offset</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">string</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">offset</span>)) = <span style="color:#e6db74">&#34;Tom&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set the ID
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">offset</span> = <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">offset</span>)) = <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set the grade
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">offset</span> = <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">grade</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">float32</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">offset</span>)) = <span style="color:#ae81ff">97.5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set the list of friends
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">offset</span> = <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">friends</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span>[]<span style="color:#66d9ef">string</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">offset</span>)) = []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;John&#34;</span>, <span style="color:#e6db74">&#34;Mary&#34;</span>, <span style="color:#e6db74">&#34;Dean&#34;</span>, <span style="color:#e6db74">&#34;Sam&#34;</span>}
+</span></span></code></pre></div><p>After executing this code, printing student yields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">student</span> = {<span style="color:#a6e22e">Tom</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">97.5</span> [<span style="color:#a6e22e">John</span> <span style="color:#a6e22e">Mary</span> <span style="color:#a6e22e">Dean</span> <span style="color:#a6e22e">Sam</span>]}
+</span></span></code></pre></div><p>The principle of pointer operation is the same throughout. Here, only the part about setting the list of friends is broken down. The two expressions for setting the list of friends can be decomposed into equivalent code as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">offset</span> = <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">student</span>.<span style="color:#a6e22e">friends</span>)            <span style="color:#75715e">// Calculate the pointer offset
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">pStudent</span> = <span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">offset</span>                         <span style="color:#75715e">// uintptr, move the pointer to the memory address where the friends variable is located
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">voidPtr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pStudent</span>)                  <span style="color:#75715e">// unsafe.Pointer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">slicePtr</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[]<span style="color:#66d9ef">string</span>)(<span style="color:#a6e22e">voidPtr</span>)                     <span style="color:#75715e">// *[]string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">*</span><span style="color:#a6e22e">slicePtr</span> = []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;John&#34;</span>, <span style="color:#e6db74">&#34;Mary&#34;</span>, <span style="color:#e6db74">&#34;Dean&#34;</span>, <span style="color:#e6db74">&#34;Sam&#34;</span>}  <span style="color:#75715e">// Set the value at the pointed-to address using the * operator
+</span></span></span></code></pre></div><p>This should be quite clear now.</p>
+<p>Finally, organizing these pointer operations into a template expression looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Assume the variable is as follows
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">variableName</span> <span style="color:#a6e22e">Type</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// When the pointer points to an array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">offset</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">arrayVariableName</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">arrayVariableName</span>[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// When the pointer points to a struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">offset</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">structVariableName</span>.<span style="color:#a6e22e">AccessMember</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">structVariableName</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set the new value for the memory address pointed to by the pointer after offset
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">Type</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">offset</span>)) = <span style="color:#a6e22e">newValue</span>
+</span></span></code></pre></div><p>Compared to C language, pointer arithmetic in Go language might be a bit more cumbersome, but once you understand the entire rule set, you&rsquo;ll know that all operating concepts are inherited, and the concepts are not as complex as they might seem in syntax.</p>
+<p>Regardless, learning and clarifying the <del><strong>quirks and techniques</strong></del> of a programming language is always a delightful process!</p>
+<h3 id="further-reading">Further Reading</h3>
+<ul>
+<li><a href="http://golang.org/pkg/unsafe/">Package unsafe</a></li>
+<li><a href="https://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/">Pitfalls of using slice in golang</a></li>
+</ul>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>
