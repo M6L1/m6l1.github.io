@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<title itemprop="name"> How to manipulate shared memory between golang and C | NEXUS-Link 
+</title>
+<meta name="description" content="One memory block and two computer languages" />
+<meta property="og:title" content="How to manipulate shared memory between golang and C | NEXUS-Link" />
+<meta name="twitter:title" content="How to manipulate shared memory between golang and C | NEXUS-Link" />
+<meta itemprop="name" content="How to manipulate shared memory between golang and C | NEXUS-Link" />
+<meta name="application-name" content="How to manipulate shared memory between golang and C | NEXUS-Link" />
+<meta property="og:description"
+      content="One memory block and two computer languages" />
+<meta property="og:site_name" content="NEXUS-Link" />
+<meta property="og:url" content="https://m6l1.github.io/technotes/how-to-manipulate-shared-memory-between-golang-and-c/" />
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/featured/golang_c.webp" />
+<meta property="og:image:secure_url" content="https://m6l1.github.io/assets/images/featured/golang_c.webp" />
+<meta property="og:type" content="article" />
+
+<script>
+    
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="/css/style.min.57a065c72661d020a64db4fe48e924d264cf9e5292116bde5612bb1e8044eacb.css" integrity="sha256-V6BlxyZh0CCmTbT+SOkk0mTPnlKSEWveVhK7HoBE6ss=" />
+
+</head>
+
+<body class="bg-zinc-100 dark:bg-gray-800">
+    <div class="top-0 z-50 w-full text-gray-200 bg-gray-900 border-2 border-gray-900 md:sticky border-b-stone-200/10">
+    <div x-data="{ open: false }"
+         class="flex flex-col max-w-full px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div class="flex flex-row items-center justify-between p-4">
+            <a href="/" class="flex text-gray-100 transition duration-1000 ease-in-out group">
+                <img src="/images/site-logo.svg"
+                     class="transition-opacity h-9 w-9 group-hover:opacity-50 group-focus:opacity-70"
+                     alt="NEXUS-Link Logo" />
+                <div
+                     class="mt-1 ml-3 text-xl font-black tracking-tight text-gray-100 uppercase transition-colors group-hover:text-gray-400/60">
+                    NEXUS-Link</div>
+            </a>
+            <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open" role="navigation" aria-expanded="false" aria-label="Main" aria-controls="menuItems">
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!open" fill-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+                          clip-rule="evenodd"></path>
+                    <path x-show="open" fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <nav :class="{'flex': open, 'hidden': !open}"
+             class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
+                Recruitment
+            </a>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/about/" title="About">
+                About
+            </a>
+            
+            
+            
+            <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline">
+                    <span>Categories</span>
+                    <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+                         class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+                        <path fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 z-30 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+                    <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/categories/technotes/">Technotes</a>
+                        
+                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
+                           href="https://m6l1.github.io/about/">About</a>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
+                href="https://m6l1.github.io/contact/" title="Contact">
+                Contact
+            </a>
+            
+            
+            
+            <button id="theme-toggle" type="button"
+                    class="p-2 text-sm text-gray-500 rounded-lg md: dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 md:ml-2 max-w-5 xs:hidden">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                    </path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     aria-label="Dark or Light Mode" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                          fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            
+        </nav>
+    </div>
+</div>
+    
+<article>
+  <header class="mb-4 bg-primary-600">
+    <span class="py-96">
+      <h1 class="py-16 text-5xl font-black text-center text-white capitalize">
+        How to manipulate shared memory between golang and C
+      </h1>
+    </span>
+  </header>
+  <div class="max-w-4xl mx-auto mt-8 mb-2">
+    <div class="px-6">
+      
+      
+      
+      
+      
+      
+      <img src="/../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_1500x0_resize_q80_h2_box_2.webp 1100w"
+           class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
+           width="100%" alt="" />
+      
+      
+    </div>
+  </div>
+  
+  <div class="max-w-2xl px-6 pt-6 pb-16 mx-auto prose dark:prose-invert dark:text-white">
+    <h3 id="one-shared-memory-space-two-different-programming-languages">One Shared Memory Space, Two Different Programming Languages</h3>
+<p>This article extends from <a href="https://m6l1.github.io/technotes/using-c-in-golang/">Using C in golang</a>, as it involves methods of pointer arithmetic in Go language. Before continuing, it is strongly recommended to understand the <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang/">related background knowledge</a>.</p>
+<p>Regardless of whether the original code is written in C or Go, these two programming languages may have different data structures. This article discusses how to use two different programming languages to operate data through a piece of shared memory. First, let&rsquo;s review how to use a C function to allocate a piece of memory in Go language:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Allocate a 128-byte memory space
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">pAry</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">malloc</span>(<span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Free the memory space
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pAry</span>))
+</span></span></code></pre></div><p>Suppose there is a Go language program that randomly generates several student data records, including the student&rsquo;s name, ID, and scores for four subjects. After generating these data, they are handed over to C language for processing. C language calculates the total score for each student based on these data, updates the total score field, then sorts the students&rsquo; data according to their scores, and finally, Go language prints out these updated data. The process illustrated graphically would be:</p>
+<p><img src="/technotes/golang_share_memory_with_c.png" alt="Golang share memory with C" title="Golang share memory with C"></p>
+<p>From the diagram, it can be quickly understood which parts need to be completed in Go language. First, decide how many student data entries to generate, using the way constants are defined in Go language to declare a <strong>_STUDENTS_COUNT</strong> of 5.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_STUDENTS_COUNT</span> = <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>Next is the <strong>Student</strong> structure for storing student data:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Student</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">math</span>, <span style="color:#a6e22e">english</span>, <span style="color:#a6e22e">chemistry</span>, <span style="color:#a6e22e">physics</span>, <span style="color:#a6e22e">total</span> <span style="color:#66d9ef">float32</span>  <span style="color:#75715e">// 5 float32 type score attributes
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>After defining the structure, the next step is to use random numbers to generate student data. In Go language, this can be done by importing the rand from math to use random number generation functions:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;math/rand&#34;</span>
+</span></span></code></pre></div><p>The prototypes for the two random number generation functions used in this program are:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Float32</span>() <span style="color:#66d9ef">float32</span>
+</span></span></code></pre></div><p>The first function, Intn(), will randomly generate an integer in the range <strong>[0, n)</strong>, and the second function, Float32(), will randomly generate a float32 type floating-point number in the range <strong>[0.0, 1.0)</strong>. The implementation function for generating student data is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">generateStudents</span>(<span style="color:#a6e22e">students</span> []<span style="color:#a6e22e">Student</span>) []<span style="color:#a6e22e">Student</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">nameList</span> <span style="color:#f92672">:=</span> [<span style="color:#f92672">...</span>]<span style="color:#66d9ef">string</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Kilroaam&#34;</span>, <span style="color:#e6db74">&#34;Ockgored&#34;</span>, <span style="color:#e6db74">&#34;Caedmas&#34;</span>, <span style="color:#e6db74">&#34;Aaron&#34;</span>, <span style="color:#e6db74">&#34;Bematen&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Chloe&#34;</span>, <span style="color:#e6db74">&#34;Manaeas&#34;</span>, <span style="color:#e6db74">&#34;Aallyah&#34;</span>, <span style="color:#e6db74">&#34;Emma&#34;</span>, <span style="color:#e6db74">&#34;Julie&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Uyfallian&#34;</span>, <span style="color:#e6db74">&#34;Thilnaeana&#34;</span>, <span style="color:#e6db74">&#34;Lymnysa&#34;</span>, <span style="color:#e6db74">&#34;Mynaaeleas&#34;</span>, <span style="color:#e6db74">&#34;Kyleigh&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Aldusa&#34;</span>, <span style="color:#e6db74">&#34;Christine&#34;</span>, <span style="color:#e6db74">&#34;Rubella&#34;</span>, <span style="color:#e6db74">&#34;Victor&#34;</span>, <span style="color:#e6db74">&#34;Xavier&#34;</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use the current system&#39;s nanosecond count as the random seed
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Seed</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">UTC</span>().<span style="color:#a6e22e">UnixNano</span>())
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// _STUDENTS_COUNT = 5, for a total of 5 student data entries
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">_STUDENTS_COUNT</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">students</span> = append(
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">students</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">Student</span>{
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">name</span>:      <span style="color:#a6e22e">nameList</span>[<span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(len(<span style="color:#a6e22e">nameList</span>))],
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">id</span>:        <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">math</span>:      <span style="color:#ae81ff">75</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Float32</span>()<span style="color:#f92672">*</span><span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">english</span>:   <span style="color:#ae81ff">75</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Float32</span>()<span style="color:#f92672">*</span><span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">chemistry</span>: <span style="color:#ae81ff">75</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Float32</span>()<span style="color:#f92672">*</span><span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">physics</span>:   <span style="color:#ae81ff">75</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Float32</span>()<span style="color:#f92672">*</span><span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">students</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The entire code is intuitive and doesn&rsquo;t need any special explanation. This code will randomly generate 5 student data entries and put them into a slice named students to be returned. The operation on the scores of the four subjects is just to ensure that each subject&rsquo;s score is at least above 75.</p>
+<p>The only thing to note in this code is that it uses the system&rsquo;s nanoseconds at the time of program execution as the random seed, because the random numbers generated by Go language are <a href="http://en.wikipedia.org/wiki/Pseudorandomness">pseudorandom numbers</a>. Using a different nanosecond as the random seed each time the program runs can generate different student data each time. Obtaining the system&rsquo;s nanoseconds requires using Go language&rsquo;s built-in time function, as mentioned in a previous section, the way to use functions from imported packages in Go language is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">{</span> package_name <span style="color:#f92672">}</span>.<span style="color:#f92672">{</span>      function_name     <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>     time     <span style="color:#f92672">}</span>.<span style="color:#f92672">{</span> Now<span style="color:#f92672">()</span>.UTC<span style="color:#f92672">()</span>.UnixNano<span style="color:#f92672">()</span> <span style="color:#f92672">}</span>  // Applied in this <span style="color:#66d9ef">function</span>
+</span></span></code></pre></div><p>Therefore, this function for getting the current system nanoseconds belongs to the <strong>time</strong> package. Hence, it must be imported at the beginning:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;time&#34;</span>
+</span></span></code></pre></div><p>After preparing the student data, the next step is to dynamically allocate memory based on the size of the data occupied in memory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">oneOffset</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">students</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// oneOffset * _STUDENTS_COUNT = The total memory capacity needed for all student data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">pSharedMem</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">malloc</span>(<span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">size_t</span>(<span style="color:#a6e22e">oneOffset</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">_STUDENTS_COUNT</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pSharedMem</span>))
+</span></span></code></pre></div><p>In this code, several functions and types from the <strong>package unsafe</strong> are used. If not familiar, you can refer to Methods of <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang/">Manipulating Pointers in golang</a>. Simply put, this code does:</p>
+<ol>
+<li>Calculate how much memory a single student structure occupies.</li>
+<li>Dynamically allocate a memory block based on the total size of the student data using the C language&rsquo;s malloc function.</li>
+<li>Declare a <strong>uintptr</strong> that can perform pointer arithmetic, pointing to this dynamically allocated memory block.</li>
+</ol>
+<p>After preparing the necessary memory, the generated student data can be copied over. This is done by calling the C function <strong>memcpy</strong>, defined in the C language&rsquo;s memory library. Since the C program to be introduced later already includes it, there&rsquo;s no need to re-import it here. First, let&rsquo;s look at the prototype of this <strong>memcpy</strong> function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">memcpy</span> ( <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span> destination, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span> source, <span style="color:#66d9ef">size_t</span> num );
+</span></span></code></pre></div><p>This C function takes three parameters, the first two are <strong>void</strong>* type pointers. The first parameter is the address to copy to, the second parameter is the address to copy from, and the last parameter is the number of bytes to copy. Previously mentioned, the concept of <strong>unsafe.Pointer</strong> in Go language is like <strong>void</strong>* in C language, so the way to use memcpy in Go language is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Not just void*, size_t also needs to be converted
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">memcpy</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pSharedMem</span>), <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">students</span>[<span style="color:#ae81ff">0</span>]), <span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">size_t</span>(<span style="color:#a6e22e">oneOffset</span><span style="color:#f92672">*</span><span style="color:#a6e22e">_STUDENTS_COUNT</span>))
+</span></span></code></pre></div><p>A common mistake C programmers might make here is to write the second pointer, pointing to the entire array of students, as either of the following two ways:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">students</span>)  <span style="color:#75715e">// Compilable, but produces incorrect results
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">students</span>)   <span style="color:#75715e">// Uncompilable, because the students slice is not a pointer!
+</span></span></span></code></pre></div><p>Why a slice is not a pointer, or why you can&rsquo;t point a pointer to the variable representing the entire slice students, is detailed in <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang#go-language-slices">Go Language&rsquo;s slice</a>. After copying, the original slice students&rsquo; space can be freed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">students</span> = <span style="color:#66d9ef">nil</span>
+</span></span></code></pre></div><p>Go language automatically performs garbage collection on variables that no longer reference any memory space.</p>
+<p>Next, let&rsquo;s verify if the data that has been copied into memory is correct:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">_STUDENTS_COUNT</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Obtain the address of the student in memory through Go language pointer arithmetic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">student</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#a6e22e">Student</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">oneOffset</span><span style="color:#f92672">*</span>uintptr(<span style="color:#a6e22e">i</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Print the student data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">student</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>For an explanation of pointer arithmetic in Go language, refer to <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang/">Manipulating Pointers in golang</a>. The printed student data is organized as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>      NAME  ID    MATH   ENGLISH   CHEMISTRY   PHYSICS    TOTAL
+</span></span><span style="display:flex;"><span>  Caedmas,  1,  78.45,    89.21,      88.10,    92.66,     0.00
+</span></span><span style="display:flex;"><span>Uyfallian,  2,  97.50,    94.94,      83.92,    92.59,     0.00
+</span></span><span style="display:flex;"><span>   Xavier,  3,  82.72,    88.65,      88.66,    86.40,     0.00
+</span></span><span style="display:flex;"><span>     Emma,  4,  78.43,    91.59,      95.85,    76.66,     0.00
+</span></span><span style="display:flex;"><span>   Xavier,  5,  90.88,    80.01,      87.98,    80.35,     0.00
+</span></span></code></pre></div><p>The total score is not shown because, when initially generating the student data randomly, the total attribute was not actively initialized, so it is automatically assigned Go language&rsquo;s <a href="https://golang.org/ref/spec#The_zero_value">zero value</a>, which is 0.0 for the float32 type.</p>
+<p>After verifying the data in memory is correct, it&rsquo;s time to call the previously written C function for processing. The prototype of the C function we plan to call is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">orderStudents</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> mem, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _NumberOfStudent, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _GradeOffset, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _StudentSize);
+</span></span></code></pre></div><p>This function requires four parameters: the first is the starting address of the student data placed in memory, the second is the total number of students, the third is the relative offset of the score attribute in the structure, and the last parameter is the size of a student structure. So far, except for the third parameter, everything else is ready, so we need to calculate this relative offset first:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">gradeOffset</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">students</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">math</span>)
+</span></span></code></pre></div><p>The reason for choosing the math attribute is that it is the first among all the score attributes. For a deeper explanation of the <strong>unsafe.Offsetof</strong> function, see <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang#using-pointers-with-composite-types">Manipulating Pointers in golang</a>.</p>
+<p>After having all parameters, we can call our C function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">orderStudents</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pSharedMem</span>), <span style="color:#a6e22e">_STUDENTS_COUNT</span>, <span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">gradeOffset</span>), <span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">oneOffset</span>))  <span style="color:#75715e">//  _STUDENTS_COUNT 是常數 5
+</span></span></span></code></pre></div><p>The only thing to note here is the <strong>conversion between variables</strong> of two programming languages. Why <strong>_STUDENTS_COUNT</strong> does not need conversion is because this parameter is defined as a constant and will be replaced with a number during the compilation stage.</p>
+<p>Below is the C function implementation called by Go language:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;memory.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Can&#39;t use printf to print so using fprintf instead
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#define printf(...) fprintf (stderr, __VA_ARGS__)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Grade structure declaration, interested only in students&#39; scores when sorting
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> Grade {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> math, english, chemistry, physics, total;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// The C function called by Go language
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">orderStudents</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> mem, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _NumberOfStudent, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _GradeOffset, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _StudentSize) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> _NumberOfStudent <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>; i<span style="color:#f92672">++</span> ) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> _NumberOfStudent <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> i; j<span style="color:#f92672">++</span> ) {
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// pGrade = starting address of student structure + size of one student structure * which student + _GradeOffset
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">struct</span> Grade <span style="color:#f92672">*</span>pGrade     <span style="color:#f92672">=</span> (<span style="color:#66d9ef">struct</span> Grade<span style="color:#f92672">*</span>)((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)mem <span style="color:#f92672">+</span> _StudentSize <span style="color:#f92672">*</span>    j    <span style="color:#f92672">+</span> _GradeOffset);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">struct</span> Grade <span style="color:#f92672">*</span>pGradeNext <span style="color:#f92672">=</span> (<span style="color:#66d9ef">struct</span> Grade<span style="color:#f92672">*</span>)((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)mem <span style="color:#f92672">+</span> _StudentSize <span style="color:#f92672">*</span> (j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> _GradeOffset);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Calculate total score
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (pGrade<span style="color:#f92672">-&gt;</span>total <span style="color:#f92672">==</span> <span style="color:#ae81ff">0.0</span>)
+</span></span><span style="display:flex;"><span>                pGrade<span style="color:#f92672">-&gt;</span>total <span style="color:#f92672">=</span> pGrade<span style="color:#f92672">-&gt;</span>math <span style="color:#f92672">+</span> pGrade<span style="color:#f92672">-&gt;</span>english <span style="color:#f92672">+</span> pGrade<span style="color:#f92672">-&gt;</span>chemistry <span style="color:#f92672">+</span> pGrade<span style="color:#f92672">-&gt;</span>physics;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (pGradeNext<span style="color:#f92672">-&gt;</span>total <span style="color:#f92672">==</span> <span style="color:#ae81ff">0.0</span>)
+</span></span><span style="display:flex;"><span>                pGradeNext<span style="color:#f92672">-&gt;</span>total <span style="color:#f92672">=</span> pGradeNext<span style="color:#f92672">-&gt;</span>math <span style="color:#f92672">+</span> pGradeNext<span style="color:#f92672">-&gt;</span>english <span style="color:#f92672">+</span> pGradeNext<span style="color:#f92672">-&gt;</span>chemistry <span style="color:#f92672">+</span> pGradeNext<span style="color:#f92672">-&gt;</span>physics;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Sort based on total score
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (pGrade<span style="color:#f92672">-&gt;</span>total <span style="color:#f92672">&gt;</span> pGradeNext<span style="color:#f92672">-&gt;</span>total) {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// pGrade - _GradeOffset = starting address of student structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                <span style="color:#66d9ef">char</span> tmpStudent[_StudentSize];
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">memcpy</span>(                               tmpStudent,      (<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)pGrade <span style="color:#f92672">-</span> _GradeOffset,  _StudentSize);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">memcpy</span>(    (<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)pGrade <span style="color:#f92672">-</span> _GradeOffset,  (<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)pGradeNext <span style="color:#f92672">-</span> _GradeOffset,  _StudentSize);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">memcpy</span>((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)pGradeNext <span style="color:#f92672">-</span> _GradeOffset,                                 tmpStudent,  _StudentSize);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This C function is straightforward and follows these steps:</p>
+<ol>
+<li>Through pointer operations, convert each student&rsquo;s scores in the passed memory into Grade structure pointers.</li>
+<li>Prepare a second Grade structure pointer, pointing to the next student&rsquo;s score data.</li>
+<li>Calculate the total score for these two Grade structure pointers and update the total variable.</li>
+<li>Sort based on the total score of each pair of students.</li>
+</ol>
+<p>Since all operations are pointer-based, every modified value is a direct access to the memory address, so the data in memory is already updated after sorting.</p>
+<p>Finally, print out the data in memory to see the results:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>      NAME  ID    MATH   ENGLISH   CHEMISTRY   PHYSICS    TOTAL
+</span></span><span style="display:flex;"><span>   Xavier,  5,  90.88,    80.01,      87.98,    80.35,   339.21
+</span></span><span style="display:flex;"><span>     Emma,  4,  78.43,    91.59,      95.85,    76.66,   342.53
+</span></span><span style="display:flex;"><span>   Xavier,  3,  82.72,    88.65,      88.66,    86.40,   346.43
+</span></span><span style="display:flex;"><span>  Caedmas,  1,  78.45,    89.21,      88.10,    92.66,   348.42
+</span></span><span style="display:flex;"><span>Uyfallian,  2,  97.50,    94.94,      83.92,    92.59,   368.96         
+</span></span></code></pre></div><p>After the student data has been processed, not only does it have total scores, but it is also sorted. Lastly, don&rsquo;t forget to release the previously declared memory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">free</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pSharedMem</span>))
+</span></span></code></pre></div><p>This concludes the method of sharing data between Go and C languages through the same piece of memory.</p>
+<h3 id="other-methods-of-copying-data-into-memory">Other Methods of Copying Data into Memory</h3>
+<p>Finally, let&rsquo;s talk about a few methods of memory copying.</p>
+<p>The memory copying method used in this article is through the C function memcpy, which, even from the perspective of Go, a higher-level language, is designed perfectly: clear functionality, simple operation, and excellent performance. You only need two addresses and a size to complete all the tasks you&rsquo;re assigned. This function feels similar to C language, where the toolbox might lack some components, so the worker has to piece things together themselves, but using each component is as intuitive, simple, and efficient as using a wrench or hammer.</p>
+<p>This section provides some other methods using Go language to copy student data into memory. Of course, there are more than these few methods; this is just to spark ideas and propose some feasible approaches. The first method continues the spirit of printing out student data, which is to obtain the memory address of the corresponding data through pointer arithmetic and then assign values:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">_STUDENTS_COUNT</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use pointer arithmetic to obtain the memory address of each student
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">pStudent</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#a6e22e">Student</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">uintPtr</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">oneOffset</span><span style="color:#f92672">*</span>uintptr(<span style="color:#a6e22e">i</span>)))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use the * operator to set the value at the address pointed to by the pointer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">*</span><span style="color:#a6e22e">pStudent</span> = <span style="color:#a6e22e">students</span>[<span style="color:#a6e22e">i</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This method copies the size of one student structure at a time, copying a total of _STUDENTS_COUNT times, which is not as efficient as memcpy, so let&rsquo;s consider a second method:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Convert uintptr through unsafe.Pointer to a pointer to a [_STUDENTS_COUNT]Student type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">allStudents</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span>[<span style="color:#a6e22e">_STUDENTS_COUNT</span>]<span style="color:#a6e22e">Student</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">uintPtr</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Copy the data of the type slice students into the pointer array allStudents
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>copy(<span style="color:#a6e22e">allStudents</span>[:], <span style="color:#a6e22e">students</span>)
+</span></span></code></pre></div><p>Both lines have points to note, explained as follows:</p>
+<p>The first line relies on the universal type conversion <strong>unsafe.Pointer</strong> to convert the original type <strong>uintptr</strong> to a pointer to a Student array of size _STUDENTS_COUNT. It&rsquo;s important to note that <strong>uintptr cannot be converted to an unspecified size slice; it must be converted to a specified size array</strong>. The reason is explained in detail in the section <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang#go-language-slices">slice in golang</a> and another section on <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang#using-pointers-with-composite-types">manipulating compound types with pointers</a> regarding <strong>unsafe.Sizeof</strong>. Simply put, a slice container, regardless of the declared type, does not hold the actual size of the type, but the fixed size of 24 for the slice, because the slice stores not the actual data but a pointer to the actual data address.</p>
+<p>The second line uses Go language&rsquo;s built-in copy() function to help us copy. As mentioned in <a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang#prototype-of-the-copy-method">the section</a> Useful Tips of Slice Tricks in Go, this copy() function prototype only accepts two slices, and having two collections of different sizes does not cause any problems; the copy always proceeds based on the smaller collection&rsquo;s length. Therefore, before copying to each other, the original allStudents array needs to be converted into a slice. Using the <strong>:</strong> operator, explained in the section <a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang#extracting-a-part-of-a-slice-into-a-new-slice">extracting a part of a slice into a new slice</a>, turns the original array into a slice as a container, and then copies all elements from students into it. The syntax <strong>[i:j]</strong> extracts all elements that meet the condition <strong>i &lt;= {x} &lt; j</strong>, and using <strong>[:]</strong> indicates taking all elements. The size of the allStudents array is explicitly specified as <strong>_STUDENTS_COUNT</strong>, which perfectly matches the size of the slice students, thus fully copying to meet our requirements.</p>
+<h3 id="further-reading">Further Reading</h3>
+<ul>
+<li><a href="https://m6l1.github.io/technotes/using-c-in-golang/">Using C in golang</a></li>
+<li><a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang/">Manipulating Pointers in golang</a></li>
+<li><a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/">Pitfalls of Using Slice in golang</a></li>
+<li><a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/">Useful Tips of Slice Tricks in golang</a></li>
+</ul>
+
+  </div>
+</article>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script src="/js/darkmode.js" defer></script>
+<footer class="bg-gray-900">
+    <div class="max-w-md px-4 py-12 mx-auto overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav class="flex flex-wrap justify-center -mx-5 -my-2" aria-label="Footer">
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
+            </div>
+            
+            <div class="px-5 py-2">
+                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
+            </div>
+            
+        </nav>
+        <div class="flex justify-center mt-8 space-x-6">
+            
+            
+            
+            
+            <a href="https://github.com/M6L1/m6l1.github.io" class="text-gray-400 hover:text-gray-300">
+                <span class="sr-only">GitHub</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+            
+        </div>
+        <p class="mt-8 text-base text-center text-gray-400">&copy; 2024
+            NEXUS-Link. All rights
+            reserved.</p>
+        <p class="mt-2 text-base text-center text-gray-400"><a href="https://github.com/nusserstudios/tailbliss" class="hover:underline hover:text-primary-600"><span>Original theme</span></a> was made with &#x2764;&#xfe0f; by <a
+               href="https://nusserstudios.com" class="hover:underline hover:text-primary-600"><span
+                      class="font-black uppercase">Nusser</span> <span class="font-light uppercase">Studios.</span></a>
+        </p>
+    </div>
+</footer>
+</body>
+
+</html>

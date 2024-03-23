@@ -6,8 +6,15 @@
     <description>Recent content in C on NEXUS-Link</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Feb 2024 11:11:11 +0700</lastBuildDate>
+    <lastBuildDate>Sat, 23 Mar 2024 09:09:22 +0700</lastBuildDate>
     <atom:link href="https://m6l1.github.io/tags/c/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to manipulate shared memory between golang and C</title>
+      <link>https://m6l1.github.io/technotes/how-to-manipulate-shared-memory-between-golang-and-c/</link>
+      <pubDate>Sat, 23 Mar 2024 09:09:22 +0700</pubDate>
+      <guid>https://m6l1.github.io/technotes/how-to-manipulate-shared-memory-between-golang-and-c/</guid>
+      <description>One memory block and two computer languages</description>
+    </item>
     <item>
       <title>Using C in golang</title>
       <link>https://m6l1.github.io/technotes/using-c-in-golang/</link>
