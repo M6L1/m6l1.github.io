@@ -15,26 +15,5 @@
       <guid>https://m6l1.github.io/recruitment/api/</guid>
       <description>Field Application Engineer</description>
     </item>
-    <item>
-      <title>DBA</title>
-      <link>https://m6l1.github.io/recruitment/db-admin/</link>
-      <pubDate>Thu, 23 Feb 2023 10:10:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/db-admin/</guid>
-      <description>Database Administrator Engineer</description>
-    </item>
-    <item>
-      <title>Data Analysis</title>
-      <link>https://m6l1.github.io/recruitment/data-analysis-dae/</link>
-      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/data-analysis-dae/</guid>
-      <description>Data Analysis Engineer</description>
-    </item>
-    <item>
-      <title>Data Analysis Assistant</title>
-      <link>https://m6l1.github.io/recruitment/data-analysis-assistant/</link>
-      <pubDate>Thu, 23 Feb 2023 09:09:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/data-analysis-assistant/</guid>
-      <description>Assistant for Data Analysis</description>
-    </item>
   </channel>
 </rss>
