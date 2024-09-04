@@ -4,7 +4,7 @@
     <title>Categories on NEXUS-Link</title>
     <link>https://m6l1.github.io/categories/</link>
     <description>Recent content in Categories on NEXUS-Link</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 23 Mar 2024 09:09:22 +0700</lastBuildDate>
     <atom:link href="https://m6l1.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
@@ -13,13 +13,6 @@
       <link>https://m6l1.github.io/categories/technotes/</link>
       <pubDate>Sat, 23 Mar 2024 09:09:22 +0700</pubDate>
       <guid>https://m6l1.github.io/categories/technotes/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Recruitment</title>
-      <link>https://m6l1.github.io/categories/recruitment/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/categories/recruitment/</guid>
       <description></description>
     </item>
   </channel>

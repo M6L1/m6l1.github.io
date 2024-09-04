@@ -4,16 +4,9 @@
     <title>Recruitments on NEXUS-Link</title>
     <link>https://m6l1.github.io/recruitment/</link>
     <description>Recent content in Recruitments on NEXUS-Link</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Feb 2023 11:11:36 +0700</lastBuildDate>
+    <lastBuildDate></lastBuildDate>
     <atom:link href="https://m6l1.github.io/recruitment/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>API</title>
-      <link>https://m6l1.github.io/recruitment/api/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/api/</guid>
-      <description>Field Application Engineer</description>
-    </item>
   </channel>
 </rss>

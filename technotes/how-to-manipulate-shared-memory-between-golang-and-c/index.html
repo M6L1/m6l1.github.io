@@ -72,13 +72,6 @@
             
             
             <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
-                href="https://m6l1.github.io/categories/recruitment/" title="Recruitment">
-                Recruitment
-            </a>
-            
-            
-            
-            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
                 href="https://m6l1.github.io/about/" title="About">
                 About
             </a>
@@ -106,9 +99,6 @@
                     <div class="px-2 py-2 text-primary-900 bg-white rounded-md shadow">
                         
                         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
-                           href="https://m6l1.github.io/categories/recruitment/">Recruitment</a>
-                        
-                        <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
                            href="https://m6l1.github.io/categories/technotes/">Technotes</a>
                         
                         <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-600 focus:outline-none focus:shadow-outline"
@@ -117,13 +107,6 @@
                     </div>
                 </div>
             </div>
-            
-            
-            
-            <a class="px-4 py-2 mt-2 text-sm font-semibold rounded-lg md:mt-0 md:ml-4 hover:text-white focus:text-white hover:bg-primary-600 focus:bg-primary-700 focus:outline-none focus:shadow-outline"
-                href="https://m6l1.github.io/contact/" title="Contact">
-                Contact
-            </a>
             
             
             
@@ -161,7 +144,7 @@
       
       
       
-      <img src="/../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_1500x0_resize_q80_h2_box_2.webp" srcset=", /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_400x0_resize_q80_h2_box_2.webp 400w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_550x0_resize_q80_h2_box_2.webp 550w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_900x0_resize_q80_h2_box_2.webp 768w, /../assets/images/featured/golang_c_hu9b071fe483f1c115f0c43071c3e24972_586144_1500x0_resize_q80_h2_box_2.webp 1100w"
+      <img src="/../assets/images/featured/golang_c_hu12133355619752638104.webp" srcset=", /../assets/images/featured/golang_c_hu2460417342661889527.webp 400w, /../assets/images/featured/golang_c_hu16186906860477044489.webp 550w, /../assets/images/featured/golang_c_hu8799943529264235449.webp 768w, /../assets/images/featured/golang_c_hu12133355619752638104.webp 1100w"
            class="object-fill overflow-hidden rounded-lg shadow-lg ring-4 ring-zinc-300/40 dark:ring-gray-900/40 shadow-neutral-100/20 dark:shadow-neutral-800/40"
            width="100%" alt="" />
       
@@ -243,7 +226,7 @@
 </span></span></code></pre></div><p>A common mistake C programmers might make here is to write the second pointer, pointing to the entire array of students, as either of the following two ways:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">students</span>)  <span style="color:#75715e">// Compilable, but produces incorrect results
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">students</span>)   <span style="color:#75715e">// Uncompilable, because the students slice is not a pointer!
-</span></span></span></code></pre></div><p>Why a slice is not a pointer, or why you can&rsquo;t point a pointer to the variable representing the entire slice students, is detailed in <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang#go-language-slices">Go Language&rsquo;s slice</a>. After copying, the original slice students&rsquo; space can be freed.</p>
+</span></span></span></code></pre></div><p>Why a slice is not a pointer, or why you can&rsquo;t point a pointer to the variable representing the entire slice students, is detailed in ]<a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang//#go-%E8%AA%9E%E8%A8%80%E4%B8%AD%E7%9A%84-slice:9c6175ba1de1fc67da72477f22240c79">Go Language&rsquo;s slice</a>. After copying, the original slice students&rsquo; space can be freed.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">students</span> = <span style="color:#66d9ef">nil</span>
 </span></span></code></pre></div><p>Go language automatically performs garbage collection on variables that no longer reference any memory space.</p>
 <p>Next, let&rsquo;s verify if the data that has been copied into memory is correct:</p>
@@ -265,7 +248,9 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">orderStudents</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> mem, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _NumberOfStudent, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _GradeOffset, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _StudentSize);
 </span></span></code></pre></div><p>This function requires four parameters: the first is the starting address of the student data placed in memory, the second is the total number of students, the third is the relative offset of the score attribute in the structure, and the last parameter is the size of a student structure. So far, except for the third parameter, everything else is ready, so we need to calculate this relative offset first:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">gradeOffset</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">students</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">math</span>)
-</span></span></code></pre></div><p>The reason for choosing the math attribute is that it is the first among all the score attributes. For a deeper explanation of the <strong>unsafe.Offsetof</strong> function, see <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang#using-pointers-with-composite-types">Manipulating Pointers in golang</a>.</p>
+</span></span></code></pre></div><p>選 math 這個屬性的原因是它排在所有分數屬性中的第一個，所以選擇它，關於 <strong>unsafe.Offsetof</strong> 函式更深入的解釋可以看<a href="http://tsunghao.github.io/post/2015/02/manipulating-pointers-in-golang/#%E4%BD%BF%E7%94%A8%E6%8C%87%E6%A8%99%E6%93%8D%E4%BD%9C%E8%A4%87%E5%90%88%E9%A1%9E%E5%9E%8B:4a13551ecbf5968c512011abac318657">這個小節</a>中的說明。<!-- raw HTML omitted -->
+所有參數都有了以後，就可以呼叫我們寫好的 C 語言函式：
+The reason for choosing the math attribute is that it is the first among all the score attributes. For a deeper explanation of the <strong>unsafe.Offsetof</strong> function, see <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang/#%E4%BD%BF%E7%94%A8%E6%8C%87%E6%A8%99%E6%93%8D%E4%BD%9C%E8%A4%87%E5%90%88%E9%A1%9E%E5%9E%8B:4a13551ecbf5968c512011abac318657">Manipulating Pointers in golang</a>.</p>
 <p>After having all parameters, we can call our C function:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">C</span>.<span style="color:#a6e22e">orderStudents</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">pSharedMem</span>), <span style="color:#a6e22e">_STUDENTS_COUNT</span>, <span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">gradeOffset</span>), <span style="color:#a6e22e">C</span>.int(<span style="color:#a6e22e">oneOffset</span>))  <span style="color:#75715e">//  _STUDENTS_COUNT 是常數 5
 </span></span></span></code></pre></div><p>The only thing to note here is the <strong>conversion between variables</strong> of two programming languages. Why <strong>_STUDENTS_COUNT</strong> does not need conversion is because this parameter is defined as a constant and will be replaced with a number during the compilation stage.</p>
@@ -344,8 +329,8 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Copy the data of the type slice students into the pointer array allStudents
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>copy(<span style="color:#a6e22e">allStudents</span>[:], <span style="color:#a6e22e">students</span>)
 </span></span></code></pre></div><p>Both lines have points to note, explained as follows:</p>
-<p>The first line relies on the universal type conversion <strong>unsafe.Pointer</strong> to convert the original type <strong>uintptr</strong> to a pointer to a Student array of size _STUDENTS_COUNT. It&rsquo;s important to note that <strong>uintptr cannot be converted to an unspecified size slice; it must be converted to a specified size array</strong>. The reason is explained in detail in the section <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang#go-language-slices">slice in golang</a> and another section on <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang#using-pointers-with-composite-types">manipulating compound types with pointers</a> regarding <strong>unsafe.Sizeof</strong>. Simply put, a slice container, regardless of the declared type, does not hold the actual size of the type, but the fixed size of 24 for the slice, because the slice stores not the actual data but a pointer to the actual data address.</p>
-<p>The second line uses Go language&rsquo;s built-in copy() function to help us copy. As mentioned in <a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang#prototype-of-the-copy-method">the section</a> Useful Tips of Slice Tricks in Go, this copy() function prototype only accepts two slices, and having two collections of different sizes does not cause any problems; the copy always proceeds based on the smaller collection&rsquo;s length. Therefore, before copying to each other, the original allStudents array needs to be converted into a slice. Using the <strong>:</strong> operator, explained in the section <a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang#extracting-a-part-of-a-slice-into-a-new-slice">extracting a part of a slice into a new slice</a>, turns the original array into a slice as a container, and then copies all elements from students into it. The syntax <strong>[i:j]</strong> extracts all elements that meet the condition <strong>i &lt;= {x} &lt; j</strong>, and using <strong>[:]</strong> indicates taking all elements. The size of the allStudents array is explicitly specified as <strong>_STUDENTS_COUNT</strong>, which perfectly matches the size of the slice students, thus fully copying to meet our requirements.</p>
+<p>The first line relies on the universal type conversion <strong>unsafe.Pointer</strong> to convert the original type <strong>uintptr</strong> to a pointer to a Student array of size _STUDENTS_COUNT. It&rsquo;s important to note that <strong>uintptr cannot be converted to an unspecified size slice; it must be converted to a specified size array</strong>. The reason is explained in detail in the section <a href="http://m6l1.github.io/technotes/pitfalls-of-using-slice-in-golang/#go-%E8%AA%9E%E8%A8%80%E4%B8%AD%E7%9A%84-slice:9c6175ba1de1fc67da72477f22240c79">slice in golang</a> and another section on <a href="http://m6l1.github.io/technotes/manipulating-pointers-in-golang/#%E4%BD%BF%E7%94%A8%E6%8C%87%E6%A8%99%E6%93%8D%E4%BD%9C%E8%A4%87%E5%90%88%E9%A1%9E%E5%9E%8B:4a13551ecbf5968c512011abac318657">manipulating compound types with pointers</a> regarding <strong>unsafe.Sizeof</strong>. Simply put, a slice container, regardless of the declared type, does not hold the actual size of the type, but the fixed size of 24 for the slice, because the slice stores not the actual data but a pointer to the actual data address.</p>
+<p>The second line uses Go language&rsquo;s built-in copy() function to help us copy. As mentioned in <a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/#prototype-of-the-copy-method">the section</a> Useful Tips of Slice Tricks in Go, this copy() function prototype only accepts two slices, and having two collections of different sizes does not cause any problems; the copy always proceeds based on the smaller collection&rsquo;s length. Therefore, before copying to each other, the original allStudents array needs to be converted into a slice. Using the <strong>:</strong> operator, explained in the section <a href="https://m6l1.github.io/technotes/useful-tips-of-slice-tricks-in-golang/#extracting-a-part-of-a-slice-into-a-new-slice">extracting a part of a slice into a new slice</a>, turns the original array into a slice as a container, and then copies all elements from students into it. The syntax <strong>[i:j]</strong> extracts all elements that meet the condition <strong>i &lt;= {x} &lt; j</strong>, and using <strong>[:]</strong> indicates taking all elements. The size of the allStudents array is explicitly specified as <strong>_STUDENTS_COUNT</strong>, which perfectly matches the size of the slice students, thus fully copying to meet our requirements.</p>
 <h3 id="further-reading">Further Reading</h3>
 <ul>
 <li><a href="https://m6l1.github.io/technotes/using-c-in-golang/">Using C in golang</a></li>
@@ -367,14 +352,6 @@
             
             <div class="px-5 py-2">
                 <a href="https://m6l1.github.io/about/" class="text-base text-gray-400 hover:text-gray-300">About</a>
-            </div>
-            
-            <div class="px-5 py-2">
-                <a href="https://m6l1.github.io/categories/recruitment/" class="text-base text-gray-400 hover:text-gray-300">Recruitment</a>
-            </div>
-            
-            <div class="px-5 py-2">
-                <a href="https://m6l1.github.io/contact/" class="text-base text-gray-400 hover:text-gray-300">Contact</a>
             </div>
             
         </nav>

@@ -4,7 +4,7 @@
     <title>Programming on NEXUS-Link</title>
     <link>https://m6l1.github.io/tags/programming/</link>
     <description>Recent content in Programming on NEXUS-Link</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 23 Mar 2024 09:09:22 +0700</lastBuildDate>
     <atom:link href="https://m6l1.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
@@ -56,13 +56,6 @@
       <pubDate>Wed, 21 Feb 2024 20:02:15 +0700</pubDate>
       <guid>https://m6l1.github.io/technotes/c-pitfalls/</guid>
       <description>Pitfalls and tricks of C programming language</description>
-    </item>
-    <item>
-      <title>API</title>
-      <link>https://m6l1.github.io/recruitment/api/</link>
-      <pubDate>Thu, 23 Feb 2023 11:11:36 +0700</pubDate>
-      <guid>https://m6l1.github.io/recruitment/api/</guid>
-      <description>Field Application Engineer</description>
     </item>
   </channel>
 </rss>
